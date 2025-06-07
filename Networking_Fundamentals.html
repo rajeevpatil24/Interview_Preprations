@@ -1,0 +1,512 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Networking Fundamentals for QA</title>
+  <style>
+    /* Global box sizing */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7fa;
+      color: #333;
+      margin: 20px;
+      line-height: 1.6;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1e90ff;
+      margin-bottom: 30px;
+    }
+
+    /* Grid container for cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto; /* center horizontally */
+    }
+
+    /* Card styling */
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      min-width: 280px;
+      word-wrap: break-word;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h2 {
+      color: #1e90ff;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      margin-top: 20px;
+      color: #1e90ff;
+    }
+
+    p {
+      margin-bottom: 12px;
+    }
+
+    .why {
+      font-style: italic;
+      color: #555;
+      margin-bottom: 15px;
+    }
+
+    pre {
+      background-color: #e9f2ff;
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: Consolas, monospace;
+      color: #d6336c;
+      margin: 0;
+    }
+
+    code {
+      font-family: Consolas, monospace;
+      color: #d6336c;
+    }
+
+    /* Additional styling for detailed sections */
+    .details-container {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .details-section {
+      margin-bottom: 30px;
+    }
+
+    ol {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Networking Fundamentals for Network QA</h1>
+
+  <div class="card">
+    <h2>TCP/IP (Transmission Control Protocol / Internet Protocol)</h2>
+    <p><strong>What:</strong> A connection-oriented protocol used for reliable communication over the internet.</p>
+    <p><strong>Real-time example:</strong> Loading a webpage uses TCP to ensure data packets arrive in order and without loss.</p>
+    <p class="why">Why it matters: Network QA often tests services over TCP to verify data integrity and connection handling.</p>
+    <h3>Common Commands:</h3>
+    <pre><code>ping www.google.com          # Test connectivity (uses ICMP but checks TCP/IP stack)
+tracert www.google.com       # Trace route packets take on Windows
+traceroute www.google.com    # Trace route packets take on Linux/macOS
+netstat -an                 # Show active TCP connections and listening ports
+telnet www.google.com 80    # Test TCP connection on port 80 (HTTP)</code></pre>
+  </div>
+
+  <div class="details-container">
+
+    <div class="details-section">
+      <strong>TCP/IP Protocol Suite:</strong> Set of communication protocols used for the Internet and similar networks, includes TCP, IP, UDP, ICMP, etc.<br><br>
+
+      <strong>IP (Internet Protocol):</strong> Responsible for addressing and routing packets to the correct destination across networks.<br>
+      - IPv4 vs IPv6: IPv4 uses 32-bit addresses, IPv6 uses 128-bit.<br><br>
+
+      <strong>TCP (Transmission Control Protocol):</strong> Connection-oriented protocol ensuring reliable, ordered delivery of data.<br>
+      - Establishes connection via three-way handshake (SYN, SYN-ACK, ACK).<br>
+      - Provides error-checking, retransmission, flow control, congestion control.<br>
+      - Segments data into packets with sequence numbers.<br><br>
+
+      <strong>UDP (User Datagram Protocol):</strong> Connectionless protocol for fast, low-latency transmission.<br>
+      - No guaranteed delivery or order.<br>
+      - Used in applications like DNS, VoIP, streaming.<br><br>
+
+      <strong>Ports and Sockets:</strong> Identify specific processes/services on hosts.<br>
+      - TCP/UDP ports range from 0 to 65535.<br>
+      - Well-known ports: HTTP (80), HTTPS (443), FTP (21).<br><br>
+
+      <strong>Subnetting:</strong> Dividing an IP network into smaller subnetworks.<br>
+      - Uses subnet mask to separate network and host portions.<br><br>
+
+      <strong>Routing:</strong> Process of forwarding packets between networks using routing tables and protocols like OSPF, BGP.<br><br>
+
+      <strong>Packet Structure:</strong> TCP/IP packets have headers with source/destination IP, ports, flags, checksums.<br><br>
+
+      <strong>Common TCP Flags:</strong> SYN (synchronize), ACK (acknowledge), FIN (finish), RST (reset).<br><br>
+
+      <strong>Error Handling:</strong> TCP uses acknowledgments and retransmissions; IP uses ICMP messages for errors.<br><br>
+
+      <strong>MTU (Maximum Transmission Unit):</strong> Max packet size that can be transmitted.<br><br>
+
+      <strong>Network Address Translation (NAT):</strong> Maps private IP addresses to public ones for internet access.<br><br>
+
+      <strong>Socket Programming:</strong> APIs used to implement TCP/IP communication in software.<br><br>
+
+      <strong>Real-Time Example:</strong> Loading a webpage - DNS resolves the domain, TCP establishes a connection, IP routes packets, HTTP transfers data over TCP.<br><br>
+
+      <strong>Command Examples:</strong> <code>ping</code>, <code>traceroute</code>, <code>netstat</code>, <code>telnet</code>.
+    </div>
+
+    <div class="details-section">
+      <strong>TCP Connection Establishment (Three-Way Handshake):</strong><br><br>
+
+      When a client wants to establish a reliable TCP connection with a server, the following steps occur:<br><br>
+
+      <ol>
+        <li>
+          <strong>SYN (Synchronize) - Client → Server:</strong><br>
+          The client sends a TCP segment with the SYN flag set to 1.<br>
+          - This segment contains an initial <em>Sequence Number (ISN)</em> chosen by the client.<br>
+          - Purpose: Request to open a new connection and synchronize sequence numbers.
+        </li><br>
+
+        <li>
+          <strong>SYN-ACK (Synchronize-Acknowledge) - Server → Client:</strong><br>
+          The server responds with a segment that has both SYN=1 and ACK=1.<br>
+          - Server picks its own ISN.<br>
+          - ACK number acknowledges the client's SYN by setting ACK = client's ISN + 1.<br>
+          - Purpose: Acknowledge client's request and send server's own sequence number.
+        </li><br>
+
+        <li>
+          <strong>ACK (Acknowledge) - Client → Server:</strong><br>
+          The client sends an ACK segment with ACK=1.<br>
+          - ACK number acknowledges server's SYN by setting ACK = server's ISN + 1.<br>
+          - Connection is now established, and both sides can start sending data.
+        </li>
+      </ol><br>
+
+      <strong>Key Internal Details:</strong><br>
+      - <em>Sequence Numbers:</em> Track bytes in the stream for ordered delivery and data integrity.<br>
+      - <em>Acknowledgment Numbers:</em> Indicate the next expected byte, confirming receipt of prior data.<br>
+      - <em>Flags:</em> Control bits in TCP header: SYN (synchronize), ACK (acknowledge), FIN (finish), RST (reset), etc.<br>
+      - <em>Window Size:</em> Flow control mechanism indicating how much data can be sent before waiting for an ACK.<br>
+      - <em>Retransmissions:</em> If ACKs aren't received timely, TCP retransmits lost packets.<br><br>
+
+      <strong>Why This Matters for QA:</strong><br>
+      - Network QA tests connection setups and tear-downs to ensure no packet loss.<br>
+      - Understanding sequence numbers helps diagnose out-of-order or dropped packets.<br>
+      - Tools like Wireshark can capture SYN, SYN-ACK, ACK packets to validate connection correctness.<br><br>
+
+      <strong>Example Command to Observe TCP Handshake:</strong><br>
+      <code>sudo tcpdump -i eth0 'tcp[tcpflags] & (tcp-syn|tcp-ack) != 0'</code> (captures SYN and ACK packets)<br>
+      <code>wireshark</code> can visually show these handshake packets with sequence and ACK numbers.<br>
+    </div>
+
+    <div class="details-section">
+      <strong>Ping</strong><br>
+      - Sends ICMP Echo Request packets to a target host to check connectivity.<br>
+      - Waits for ICMP Echo Reply from the host.<br>
+      - Measures round-trip time and packet loss.<br>
+      <strong>Command:</strong><br>
+      <code>ping www.google.com</code><br>
+      <strong>Internals:</strong><br>
+      - ICMP packets operate at the Network Layer (IP Layer).<br>
+      - Helps diagnose if the host is reachable and network latency.<br><br>
+
+      <strong>Traceroute (Linux/macOS) / Tracert (Windows)</strong><br>
+      - Determines the path packets take to reach a destination.<br>
+      - Sends packets with increasing TTL (Time To Live) values.<br>
+      - Each router along the path decreases TTL by 1; when TTL=0, router replies with ICMP "Time Exceeded" message.<br>
+      - Maps each hop by capturing these replies.<br>
+      <strong>Command:</strong><br>
+      <code>traceroute www.google.com</code> or <code>tracert www.google.com</code><br>
+      <strong>Internals:</strong><br>
+      - Works by manipulating TTL values in IP header.<br>
+      - Shows latency and route taken.<br><br>
+
+      <strong>Netstat</strong><br>
+      - Displays active TCP/UDP connections, listening ports, routing tables, and network interface stats.<br>
+      <strong>Command:</strong><br>
+      <code>netstat -an</code><br>
+      <strong>Internals:</strong><br>
+      - Queries OS network stack for socket status.<br>
+      - Helps identify open ports, established connections, and protocol stats.<br><br>
+
+      <strong>Telnet</strong><br>
+      - Tests TCP connectivity to a specific port on a remote host.<br>
+      - Useful for checking if a service (like HTTP on port 80) is accessible.<br>
+      <strong>Command:</strong><br>
+      <code>telnet www.google.com 80</code><br>
+      <strong>Internals:</strong><br>
+      - Opens a TCP connection using a three-way handshake.<br>
+      - If successful, you can manually send commands (like HTTP requests).<br>
+      - If connection fails, port is blocked or service is down.<br>
+    </div>
+  </div>
+<div class="grid">
+  <div class="card">
+    <h2>UDP (User Datagram Protocol)</h2>
+    <p><strong>What:</strong> A connectionless protocol used for fast, low-latency transmissions where occasional loss is acceptable.</p>
+    <p><strong>Real-time example:</strong> Streaming video or online gaming uses UDP to minimize delay.</p>
+    <p class="why">Why it matters: QA needs to verify packet loss handling and latency under UDP.</p>
+    
+    <h3>Common Commands:</h3>
+    <pre><code>netstat -anu             # Show active UDP connections (Linux/macOS)
+netstat -an | find "UDP"  # Show UDP connections on Windows
+iperf3 -u -c server_ip    # Test UDP bandwidth to a server (requires iperf3 installed)</code></pre>
+
+    <h3>How It Works:</h3>
+    <ul>
+      <li><strong>1. Application sends data:</strong> A user-level app creates data and uses a UDP socket (SOCK_DGRAM).</li>
+      <li><strong>2. Datagram is formed:</strong> UDP wraps the data in a datagram with an 8-byte header.</li>
+      <li><strong>3. IP layer adds routing info:</strong> The datagram is encapsulated in an IP packet and sent across the network.</li>
+      <li><strong>4. Packet reaches destination:</strong> The receiving host’s IP layer extracts the UDP datagram and hands it to the right application via port matching.</li>
+      <li><strong>5. Application receives it:</strong> No ACK is sent, no retransmission occurs—delivery is not guaranteed.</li>
+    </ul>
+
+    <h3>UDP Packet Structure:</h3>
+    <pre><code>  0      7 8     15 16    23 24    31
+ +--------+--------+--------+--------+
+ | Source | Destin | Length | Check  |
+ | Port   |  Port  |        | sum    |
+ +--------+--------+--------+--------+
+ |              Data ...              |
+ +-----------------------------------+</code></pre>
+
+    <h3>Pros:</h3>
+    <ul>
+      <li>Low latency — no handshake delays</li>
+      <li>Lightweight — only 8-byte header</li>
+      <li>Supports multicast/broadcast</li>
+      <li>No congestion control — max throughput</li>
+    </ul>
+
+    <h3>Cons:</h3>
+    <ul>
+      <li>No delivery guarantee, ordering, or retransmission</li>
+      <li>Packets may be lost or arrive out of order</li>
+      <li>No built-in congestion control</li>
+      <li>Susceptible to spoofing and DDoS attacks</li>
+    </ul>
+
+    <h3>Typical Use Cases:</h3>
+    <ul>
+      <li><strong>DNS:</strong> Quick request-response, small payload</li>
+      <li><strong>Online Gaming:</strong> Speed > reliability</li>
+      <li><strong>VoIP:</strong> Latency-sensitive, tolerates minor loss</li>
+      <li><strong>Streaming:</strong> Delivers fast even if some frames drop</li>
+      <li><strong>SNMP:</strong> Lightweight device monitoring</li>
+    </ul>
+
+    <h3>QA Testing Tips:</h3>
+    <ul>
+      <li>Use <code>iperf3 -u</code> to simulate and measure UDP throughput and loss</li>
+      <li>Monitor for dropped packets using <code>Wireshark</code> or <code>tcpdump udp</code></li>
+      <li>Validate handling of missing or out-of-order packets in application logs or metrics</li>
+      <li>Use <code>netcat -u</code> for quick UDP connectivity tests</li>
+    </ul>
+
+    <h3>Real Example: DNS Query Over UDP</h3>
+    <ol>
+      <li>User types <code>nslookup example.com</code></li>
+      <li>DNS client sends UDP packet to port 53 on DNS server</li>
+      <li>Server responds with an IP address in a UDP packet</li>
+      <li>No connection or retransmission—just fast exchange</li>
+    </ol>
+  </div>
+</div>
+
+ 
+
+  <div class="card">
+  <h2>DNS (Domain Name System)</h2>
+  <p><strong>What:</strong> Translates human-readable domain names into IP addresses.</p>
+  <p><strong>Real-time example:</strong> Typing “<code>www.google.com</code>” in a browser triggers a DNS lookup to find its IP.</p>
+  <p class="why">Why it matters: QA tests often check DNS resolution to ensure services are reachable.</p>
+
+  <h3>Common Commands:</h3>
+  <pre><code>nslookup www.google.com   # Query DNS server for a domain
+dig www.google.com        # More detailed DNS lookup (Linux/macOS)
+host www.google.com       # Simple DNS lookup (Linux/macOS)</code></pre>
+
+  <h3>How It Works:</h3>
+  <ol>
+    <li><strong>1. User Input:</strong> A user enters a domain name in a browser.</li>
+    <li><strong>2. DNS Resolver:</strong> OS contacts a configured DNS resolver (usually provided by ISP or set manually).</li>
+    <li><strong>3. Cache Check:</strong> Resolver checks its local cache. If not found:</li>
+    <li><strong>4. Recursive Query:</strong> Resolver queries root servers, then TLD (e.g., .com), then authoritative name server.</li>
+    <li><strong>5. IP Response:</strong> The final IP address is returned to the resolver, then to the user’s application.</li>
+    <li><strong>6. Connection Made:</strong> Now the application can connect using the resolved IP.</li>
+  </ol>
+
+  <h3>DNS Packet Structure (UDP, Port 53):</h3>
+  <pre><code>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+| ID (16 bits)      | Flags (16 bits)          |
++-------------------+--------------------------+
+| Questions (16 bits)| Answer RRs (16 bits)    |
++-------------------+--------------------------+
+| Authority RRs      | Additional RRs          |
++-------------------+--------------------------+
+| Queries / Responses follow                   |
++---------------------------------------------+</code></pre>
+
+  <h3>Key Flags in DNS Header:</h3>
+  <ul>
+    <li><strong>QR:</strong> Query (0) or Response (1)</li>
+    <li><strong>Opcode:</strong> Standard, Inverse, or Server status</li>
+    <li><strong>AA:</strong> Authoritative Answer</li>
+    <li><strong>TC:</strong> Truncated</li>
+    <li><strong>RD:</strong> Recursion Desired</li>
+    <li><strong>RA:</strong> Recursion Available</li>
+    <li><strong>RCODE:</strong> Response code (e.g., 0 = No error)</li>
+  </ul>
+
+  <h3>Record Types:</h3>
+  <ul>
+    <li><strong>A:</strong> Maps a domain to IPv4 address</li>
+    <li><strong>AAAA:</strong> Maps a domain to IPv6 address</li>
+    <li><strong>CNAME:</strong> Canonical name (alias)</li>
+    <li><strong>MX:</strong> Mail exchange server</li>
+    <li><strong>NS:</strong> Name server</li>
+    <li><strong>PTR:</strong> Reverse lookup</li>
+    <li><strong>TXT:</strong> Miscellaneous text data (e.g., SPF)</li>
+  </ul>
+
+  <h3>Pros:</h3>
+  <ul>
+    <li>Enables user-friendly domain names</li>
+    <li>Fast and distributed through caching</li>
+    <li>Extensible (via record types and DNSSEC)</li>
+  </ul>
+
+  <h3>Cons:</h3>
+  <ul>
+    <li>Can be spoofed or hijacked (if not secured)</li>
+    <li>Relies on external services—if DNS is down, apps fail</li>
+    <li>UDP-based—vulnerable to truncation/spoofing unless using DNSSEC or DoH</li>
+  </ul>
+
+  <h3>Typical Use Cases:</h3>
+  <ul>
+    <li>Web browsing: Resolving domains to connect</li>
+    <li>Email delivery: MX record lookups</li>
+    <li>CDN selection: Geo-aware DNS responses</li>
+    <li>Network troubleshooting and security auditing</li>
+  </ul>
+
+  <h3>QA Testing Tips:</h3>
+  <ul>
+    <li>Use <code>dig</code>, <code>nslookup</code>, or <code>host</code> to verify DNS response correctness</li>
+    <li>Check TTL values for cache behavior</li>
+    <li>Validate fallback if primary DNS fails</li>
+    <li>Monitor DNS resolution latency (especially for CDNs and multi-region setups)</li>
+    <li>Test reverse lookups (PTR) for compliance/security logging</li>
+  </ul>
+
+  <h3>Real Example: DNS Lookup Flow</h3>
+  <ol>
+    <li>Browser needs to access <code>www.example.com</code></li>
+    <li>It sends a query to local resolver</li>
+    <li>Resolver checks cache, else queries authoritative DNS hierarchy</li>
+    <li>Returns A record (e.g., 93.184.216.34)</li>
+    <li>Browser connects to that IP and fetches content</li>
+  </ol>
+</div>
+
+<div class="card">
+  <h2>DHCP (Dynamic Host Configuration Protocol)</h2>
+  <p><strong>What:</strong> Automatically assigns IP addresses and network configurations (e.g., subnet mask, gateway, DNS) to devices in a network.</p>
+  <p><strong>Real-time example:</strong> When your laptop connects to Wi-Fi, the router's DHCP server provides an IP address and other network settings.</p>
+  <p class="why">Why it matters: QA might need to verify dynamic IP assignment, lease time behavior, fallback handling, and renewal timing.</p>
+
+  <h3>Common Commands:</h3>
+  <pre><code>ipconfig /release       # Release current DHCP IP (Windows)
+ipconfig /renew         # Request new DHCP IP (Windows)
+dhclient -v             # Request IP via DHCP (Linux/macOS)</code></pre>
+
+  <h3>How It Works: DHCP Lease Process (DORA)</h3>
+  <ol>
+    <li><strong>1. Discover:</strong> Client broadcasts a DHCPDISCOVER message to locate DHCP servers.</li>
+    <li><strong>2. Offer:</strong> Server responds with a DHCPOFFER message containing an IP address and config options.</li>
+    <li><strong>3. Request:</strong> Client sends a DHCPREQUEST message to accept the offered IP.</li>
+    <li><strong>4. Acknowledgment:</strong> Server confirms with a DHCPACK message, completing the lease assignment.</li>
+  </ol>
+
+  <h3>Packet Structure (Over UDP):</h3>
+  <ul>
+    <li><strong>UDP Port:</strong> Server listens on 67, client on 68</li>
+  </ul>
+  <pre><code>+---------------------------------------------------+
+| Operation Code (1 byte): 1=Request, 2=Reply       |
+| Hardware Type (1 byte)                            |
+| Hardware Address Length (1 byte)                  |
+| Hops (1 byte)                                     |
+| Transaction ID (4 bytes)                          |
+| Seconds Elapsed (2 bytes)                         |
+| Flags (2 bytes)                                   |
+| Client IP Address (4 bytes)                       |
+| Your IP Address (4 bytes)                         |
+| Server IP Address (4 bytes)                       |
+| Gateway IP Address (4 bytes)                      |
+| Client MAC Address (16 bytes total)               |
+| Server Name (optional, 64 bytes)                  |
+| Boot File Name (optional, 128 bytes)              |
+| Options (variable length, includes message type)  |
++---------------------------------------------------+</code></pre>
+
+  <h3>Important DHCP Options:</h3>
+  <ul>
+    <li><strong>Option 1:</strong> Subnet Mask</li>
+    <li><strong>Option 3:</strong> Default Gateway</li>
+    <li><strong>Option 6:</strong> DNS Servers</li>
+    <li><strong>Option 51:</strong> Lease Time</li>
+    <li><strong>Option 53:</strong> Message Type (Discover, Offer, etc.)</li>
+    <li><strong>Option 54:</strong> Server Identifier</li>
+  </ul>
+
+  <h3>Lease Lifecycle:</h3>
+  <ul>
+    <li><strong>T1:</strong> 50% of lease time – client tries to renew with same server</li>
+    <li><strong>T2:</strong> 87.5% of lease time – tries again with any server</li>
+    <li><strong>Lease Expiry:</strong> If no response, the lease expires and client restarts the DORA process</li>
+  </ul>
+
+  <h3>Typical Use Cases:</h3>
+  <ul>
+    <li>Home routers providing dynamic IPs</li>
+    <li>Enterprise networks managing hundreds of devices</li>
+    <li>Virtual machines needing temporary IPs</li>
+  </ul>
+
+  <h3>QA Testing Tips:</h3>
+  <ul>
+    <li>Test IP assignment in different subnets</li>
+    <li>Check lease renewal and expiration behavior</li>
+    <li>Validate DHCP fallback when no server responds</li>
+    <li>Monitor for IP conflicts or MAC address reuse</li>
+    <li>Use <code>tcpdump</code> or <code>Wireshark</code> to inspect DHCP packet exchanges</li>
+  </ul>
+
+  <h3>Pros:</h3>
+  <ul>
+    <li>Reduces manual IP configuration errors</li>
+    <li>Efficient for dynamic networks (guests, IoT)</li>
+    <li>Supports centralized control and auditing</li>
+  </ul>
+
+  <h3>Cons:</h3>
+  <ul>
+    <li>Dependent on a reachable DHCP server</li>
+    <li>No authentication by default (susceptible to rogue DHCP attacks)</li>
+    <li>May cause brief network delay on reconnect</li>
+  </ul>
+</div>
+
+
+</body>
+</html>

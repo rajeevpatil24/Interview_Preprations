@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Software Testing Concepts</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333366;
+      margin-top: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      color: #2d3e50;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      margin: 6px 0;
+      font-size: 14px;
+      color: #4b5d67;
+    }
+
+    .card p {
+      font-size: 14px;
+      margin: 4px 0 10px 0;
+    }
+
+    .card ul {
+      padding-left: 20px;
+    }
+
+    .card ul li {
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+  </style>
+
+
+  <h1>Software Testing Concepts</h1>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Unit Testing</h2>
+      <h3>What</h3><p>Testing individual functions or methods in isolation.</p>
+      <h3>Why</h3><p>Ensure correctness of smallest code units.</p>
+      <h3>Where</h3><p>In development phase using frameworks.</p>
+      <h3>How</h3><p>Test PayPal payload formatter before integration.</p>
+      <h3>Example</h3><p>Check `formatPayload()` returns valid JSON.</p>
+      <h3>Who</h3><p>Developers.</p>
+      <h3>Tools</h3><p>JUnit, pytest, NUnit, Jest.</p>
+      <h3>Interview Notes</h3><p>Commonly asked about mocking and isolation strategies.</p>
+    </div>
+
+    <div class="card">
+      <h2>Integration Testing</h2>
+      <h3>What</h3><p>Tests combined modules or systems together.</p>
+      <h3>Why</h3><p>Verify data flow and module interaction.</p>
+      <h3>Where</h3><p>Between services or external APIs.</p>
+      <h3>How</h3><p>Connect Infoblox logging → Loki → Grafana.</p>
+      <h3>Example</h3><p>Check logs sent from DHCP server appear in dashboard.</p>
+      <h3>Who</h3><p>QA engineers, developers.</p>
+      <h3>Tools</h3><p>Postman, REST Assured, JUnit + Spring Boot.</p>
+      <h3>Interview Notes</h3><p>Focus on API chaining, contract testing.</p>
+    </div>
+
+    <div class="card">
+      <h2>Regression Testing</h2>
+      <h3>What</h3><p>Re-testing after updates to catch new issues.</p>
+      <h3>Why</h3><p>Ensure stability after fixes or enhancements.</p>
+      <h3>Where</h3><p>Before releases or after patches.</p>
+      <h3>How</h3><p>Rerun test cases on PayPal checkout flow.</p>
+      <h3>Example</h3><p>Ensure button still works after SDK upgrade.</p>
+      <h3>Who</h3><p>QA team, automation engineers.</p>
+      <h3>Tools</h3><p>Selenium, TestNG, Jenkins pipelines.</p>
+      <h3>Interview Notes</h3><p>Often asked: how do you maintain regression suites?</p>
+    </div>
+
+    <div class="card">
+      <h2>Smoke Testing</h2>
+      <h3>What</h3><p>Quick test to confirm build health.</p>
+      <h3>Why</h3><p>Ensure major features are not broken.</p>
+      <h3>Where</h3><p>Initial step after deployment.</p>
+      <h3>How</h3><p>Open UI, hit login, check dashboard loads.</p>
+      <h3>Example</h3><p>Verify Infoblox UI launches post-deployment.</p>
+      <h3>Who</h3><p>QA team, DevOps.</p>
+      <h3>Tools</h3><p>Manual checklist, automated scripts.</p>
+      <h3>Interview Notes</h3><p>Difference between smoke & sanity is commonly asked.</p>
+    </div>
+    <div class="card">
+      <h2>API Testing</h2>
+      <h3>What</h3>
+      <p>Test backend API endpoints and responses.</p>
+      <h3>Why</h3>
+      <p>Validate functionality, performance, security.</p>
+      <h3>Where</h3>
+      <p>Backend services and integrations.</p>
+      <h3>How</h3>
+      <p>Call <code>/paypal/order</code> and validate response JSON.</p>
+      <h3>Example</h3>
+      <p>Confirm PayPal transaction returns <code>COMPLETED</code>.</p>
+      <h3>Status Codes</h3>
+      <ul>
+        <li style="color: #1e90ff; font-weight: bold;"><code>200 OK</code>: Successful request</li>
+        <li style="color: #1e90ff; font-weight: bold;"><code>400 Bad Request</code>: Invalid input</li>
+        <li style="color: #1e90ff; font-weight: bold;"><code>401 Unauthorized</code>: Missing or invalid auth</li>
+        <li style="color: #1e90ff; font-weight: bold;"><code>500 Internal Server Error</code>: Server failure</li>
+      </ul> 
+      <h3>Schema</h3>
+      <p>Response JSON should follow:</p>
+      <pre style="background:#f4f4f4; padding:10px; border-radius:6px; overflow-x:auto;">
+        {
+          "orderId": "12345",
+          "status": "COMPLETED",
+          "amount": 99.99,
+          "currency": "USD",
+          "payer": {
+            "name": "John Doe",
+            "email": "john.doe@example.com"
+          }
+        }
+      </pre>
+      <h3>Auth Header</h3>
+      <p>Use <code>Authorization: Bearer &lt;token&gt;</code> in request headers for authentication.</p>
+      <h3>Interview Notes</h3>
+      <p>Focus on status codes, schema validation, and auth headers.</p>
+    </div>
+
+    <div class="card">
+  <h2>Testing Types Comparison</h2>
+  <table style="width: 100%; border-collapse: collapse; margin-top: 15px; table-layout: auto; word-wrap: break-word; white-space: normal;">
+    <thead>
+      <tr style="background-color: #2d3e50; color: white;">
+        <th style="padding: 10px; border: 1px solid #ddd; text-align: left; word-wrap: break-word; white-space: normal;">Sanity Testing</th>
+        <th style="padding: 10px; border: 1px solid #ddd; text-align: left; word-wrap: break-word; white-space: normal;">Smoke Testing</th>
+        <th style="padding: 10px; border: 1px solid #ddd; text-align: left; word-wrap: break-word; white-space: normal;">Regression Testing</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background-color: #f9f9f9;">
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Verify specific functionality after changes</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Check if critical functions work before detailed testing</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Ensure new changes do not break existing features</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Narrow, focused on particular parts</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Broad, basic tests on major functions</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Extensive, covers full system</td>
+      </tr>
+      <tr style="background-color: #f9f9f9;">
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">After receiving a new build with minor changes</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Initial check on new builds</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">After any major or minor change, before release</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Often manual, sometimes automated</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Usually automated</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Mostly automated</td>
+      </tr>
+      <tr style="background-color: #f9f9f9;">
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Decide if build is stable enough for detailed testing</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Decide if build is stable enough for further testing</td>
+        <td style="padding: 8px; border: 1px solid #ddd; word-wrap: break-word; white-space: normal; vertical-align: top;">Confirm system integrity after changes</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+    <div class="card">
+      <h2>Beta Testing</h2>
+      <h3>What</h3><p>User testing in real-world setting.</p>
+      <h3>Why</h3><p>Catch bugs and gather feedback.</p>
+      <h3>Where</h3><p>Release to select users before public launch.</p>
+      <h3>How</h3><p>Let partners use early access PayPal features.</p>
+      <h3>Example</h3><p>Invite Infoblox customers to try DNS template feature.</p>
+      <h3>Who</h3><p>End-users, product team monitors.</p>
+      <h3>Tools</h3><p>Surveys, feedback tools, logs.</p>
+      <h3>Interview Notes</h3><p>How feedback influences final release is key Q.</p>
+    </div>
+
+        <div class="card">
+      <h2>Ad-hoc Testing</h2>
+      <h3>What</h3><p>Unplanned, informal testing without scripts.</p>
+      <h3>Why</h3><p>Quickly uncover UI or logic bugs.</p>
+      <h3>Where</h3><p>Any module with high bug rate.</p>
+      <h3>How</h3><p>Randomly test DNS feature flows.</p>
+      <h3>Example</h3><p>Try invalid IPs and observe validation messages.</p>
+      <h3>Who</h3><p>QA engineers, exploratory testers.</p>
+      <h3>Tools</h3><p>No tools; manual efforts.</p>
+      <h3>Interview Notes</h3><p>Know difference between exploratory and ad-hoc.</p>
+    </div>
+
+    <div class="card">
+      <h2>Black Box Testing</h2>
+      <h3>What</h3><p>Test software without knowing internal code.</p>
+      <h3>Why</h3><p>Focus on input/output correctness.</p>
+      <h3>Where</h3><p>UI testing, functional validation.</p>
+      <h3>How</h3><p>Enter invalid amounts into PayPal UI.</p>
+      <h3>Example</h3><p>Submit $0 transaction, verify error.</p>
+      <h3>Who</h3><p>Testers, end users (beta phase).</p>
+      <h3>Tools</h3><p>Selenium, Cypress, manual testing.</p>
+      <h3>Interview Notes</h3><p>Often asked with examples like login form test.</p>
+    </div>
+
+    <div class="card">
+      <h2>White Box Testing</h2>
+      <h3>What</h3><p>Test internal structure, logic, and code flow.</p>
+      <h3>Why</h3><p>Ensure code-level correctness.</p>
+      <h3>Where</h3><p>Unit tests, branch condition coverage.</p>
+      <h3>How</h3><p>Test every logic branch in payment handler.</p>
+      <h3>Example</h3><p>Validate all paths of `handlePayPalResponse()`.</p>
+      <h3>Who</h3><p>Developers, sometimes automation testers.</p>
+      <h3>Tools</h3><p>JUnit, coverage tools (JaCoCo, Istanbul).</p>
+      <h3>Interview Notes</h3><p>Be ready to discuss code coverage types.</p>
+      <h3>Types of Code Coverage</h3>
+      <ul>
+        <li style="color: #1e90ff; font-weight: bold;"><strong>Line Coverage:</strong> Percentage of executed lines of code.</li>
+        <li style="color: #1e90ff; font-weight: bold;"><strong>Function Coverage:</strong> Percentage of functions/methods called.</li>
+        <li style="color: #1e90ff; font-weight: bold;"><strong>Branch Coverage:</strong> Percentage of branches (if/else) tested.</li>
+        <li style="color: #1e90ff; font-weight: bold;"><strong>Condition Coverage:</strong> Percentage of boolean expressions evaluated both true and false.</li>
+      </ul>
+      <h3>Why Important?</h3>
+      <p>Helps identify untested parts, improve test effectiveness, and ensure software reliability.</p>
+    </div>
+
+    <div class="card">
+      <h2>Exploratory Testing</h2>
+      <h3>What</h3><p>Simultaneous learning and testing.</p>
+      <h3>Why</h3><p>Explore features without scripts.</p>
+      <h3>Where</h3><p>New modules or undocumented features.</p>
+      <h3>How</h3><p>Interact with Infoblox DNS wizard freely.</p>
+      <h3>Example</h3><p>Create unusual DNS templates and observe results.</p>
+      <h3>Who</h3><p>Experienced testers with domain knowledge.</p>
+      <h3>Tools</h3><p>Mind maps, exploratory charters, session notes.</p>
+      <h3>Interview Notes</h3><p>Interviewers ask how you capture findings quickly.</p>
+      <h3>Best Practices</h3>
+        <ul>
+          <li style="color: #1e90ff; font-weight: bold;">Use bug tracking tools like JIRA, Bugzilla, or Trello for immediate logging.</li>
+          <li style="color: #1e90ff; font-weight: bold;">Take clear, concise notes during testing sessions.</li>
+          <li style="color: #1e90ff; font-weight: bold;">Capture screenshots or video recordings for evidence.</li>
+          <li style="color: #1e90ff; font-weight: bold;">Use templates or checklists to standardize reporting.</li>
+          <li style="color: #1e90ff; font-weight: bold;">Summarize issues with clear steps to reproduce and expected vs actual results.</li>
+        </ul>
+    </div>
+    <div class="card">
+        <h2>Exploratory vs Ad-hoc Testing</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 15px; table-layout: auto; word-wrap: break-word; white-space: normal;">
+          <thead>
+            <tr style="background-color: #2d3e50; color: white;">
+              <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Exploratory Testing</th>
+              <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Ad-hoc Testing</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background-color: #f9f9f9;">
+              <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">Structured without predefined test cases</td>
+              <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">Unstructured, informal without planning</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">Design and execute tests simultaneously</td>
+              <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">Random testing without documentation</td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+              <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">Learning app & discovering defects</td>
+              <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">Quick defect finding “on the fly”</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">Document findings and adapt tests</td>
+              <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">Usually no traceability or reproducibility</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    <div class="card">
+      <h2>Monkey Testing</h2>
+      <h3>What</h3><p>Random input and actions to test app stability.</p>
+      <h3>Why</h3><p>Catch unpredictable crashes or behaviors.</p>
+      <h3>Where</h3><p>UI-heavy or mobile/web apps.</p>
+      <h3>How</h3><p>Automate random clicks and keypresses.</p>
+      <h3>Example</h3><p>Trigger random actions on PayPal sandbox UI.</p>
+      <h3>Who</h3><p>QA automation engineers.</p>
+      <h3>Tools</h3><p>MonkeyRunner (Android), Chaos Monkey.</p>
+      <h3>Interview Notes</h3><p>Differentiate it from exploratory testing.</p>
+    </div>
+
+    <div class="card">
+      <h2>Severity</h2>
+      <h3>What</h3><p>Impact level of the issue on system function.</p>
+      <h3>Why</h3><p>Helps prioritize bug fixes.</p>
+      <h3>Where</h3><p>Bug tracking during QA phase.</p>
+      <h3>How</h3><p>Label critical if payment fails completely.</p>
+      <h3>Example</h3><p>500 error in PayPal = High Severity.</p>
+      <h3>Who</h3><p>QA, developers, project managers.</p>
+      <h3>Tools</h3><p>JIRA, Bugzilla, Azure DevOps.</p>
+      <h3>Interview Notes</h3><p>Know difference between severity and priority.</p>
+    </div>
+
+      <div class="card">
+          <h2>Testing Concepts Comparison</h2>
+          <table style="width: 100%; border-collapse: collapse; margin-top: 15px; table-layout: auto; word-wrap: break-word; white-space: normal;">
+            <thead>
+              <tr style="background-color: #2d3e50; color: white;">
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Severity vs Priority</th>
+                <th style="padding: 10px; border: 1px solid #ddd; text-align: left;">Cross-browser vs Cross-platform Testing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background-color: #f9f9f9;">
+                <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">
+                  <strong>Severity:</strong> Impact of a defect on the system.<br>
+                  <strong>Priority:</strong> Order in which a defect should be fixed.
+                </td>
+                <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">
+                  <strong>Cross-browser:</strong> Testing on different web browsers (Chrome, Firefox, Safari).<br>
+                  <strong>Cross-platform:</strong> Testing on different OS/platforms (Windows, macOS, Android).
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">
+                  Severity focuses on technical impact.<br>
+                  Priority focuses on business urgency.
+                </td>
+                <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">
+                  Ensure consistent behavior and UI across browsers.<br>
+                  Ensure functionality works across OS and devices.
+                </td>
+              </tr>
+              <tr style="background-color: #f9f9f9;">
+                <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">
+                  Severity: Crash or data loss = High.<br>
+                  Priority: Critical bug fixed first regardless of severity.
+                </td>
+                <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">
+                  Cross-browser: Buttons misaligned in IE.<br>
+                  Cross-platform: App crashes on Android but works on iOS.
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">
+                  Severity: Usually QA or developers.<br>
+                  Priority: Product owner or business stakeholders.
+                </td>
+                <td style="padding: 8px; border: 1px solid #ddd; vertical-align: top;">
+                  Testing team plans browser coverage.<br>
+                  Testing team plans platform/device coverage.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+    <div class="card">
+      <h2>Compatibility Testing</h2>
+      <h3>What</h3><p>Ensure app works on all platforms & environments.</p>
+      <h3>Why</h3><p>Deliver consistent user experience.</p>
+      <h3>Where</h3><p>Across OS, devices, browsers, APIs.</p>
+      <h3>How</h3><p>Open PayPal UI on Chrome, Firefox, Safari, Edge.</p>
+      <h3>Example</h3><p>Button misaligned only on iOS Safari.</p>
+      <h3>Who</h3><p>QA engineers, mobile/web testers.</p>
+      <h3>Tools</h3><p>BrowserStack, SauceLabs, LambdaTest.</p>
+      <h3>Interview Notes</h3><p>Know the difference between cross-browser and cross-platform testing.</p>
+    </div>
+
+    <div class="card">
+      <h2>Grey Box Testing</h2>
+      <h3>What</h3><p>Mix of black box and white box techniques.</p>
+      <h3>Why</h3><p>Combine functional view with internal insight.</p>
+      <h3>Where</h3><p>Integration & security testing scenarios.</p>
+      <h3>How</h3><p>UI test + inspecting API payloads and logs.</p>
+      <h3>Example</h3><p>Check PayPal flow + validate logs and DB updates.</p>
+      <h3>Who</h3><p>Testers with partial system knowledge.</p>
+      <h3>Tools</h3><p>Charles Proxy, Wireshark, Burp Suite.</p>
+      <h3>Interview Notes</h3><p>Be ready to explain how internal knowledge enhances test cases.</p>
+    </div>
+  
+
+<h1>Interview Questions by Testing Type</h1>
+  
+  <div class="card">
+    <h2>Unit Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">What is unit testing and why is it important?</li>
+      <li style="color: #1e90ff; font-weight: bold;">How do you mock dependencies?</li>
+       <td> 
+          Replace real objects (like services, DBs, APIs) with fake/mock objects to isolate the unit being tested.</td>
+      <li style="color: #1e90ff; font-weight: bold;">How do you handle private methods in unit tests </li>
+      <td>
+          Avoid direct testing. Instead, test them indirectly via public methods that use them.<br>
+          If needed, use reflection or package-level access (less recommended).</td>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Integration Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">How do you test interactions between modules?</li>
+      <li style="color: #1e90ff; font-weight: bold;">What tools do you use for integration testing?</li>
+      <li style="color: #1e90ff; font-weight: bold;">What issues did you face in service integration testing?</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Regression Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">What is regression testing and when is it performed?</li>
+      <!-- For "How do you manage test cases for regression?" -->
+      <li style="color: #1e90ff; font-weight: bold;">How do you manage test cases for regression?</li>
+      <td>
+        Organize test cases into suites based on features and risk.<br>
+        Maintain updated, reusable regression test suites.<br>
+        Automate critical test cases to run frequently.<br>
+        Prioritize tests based on past defects and impact areas.<br>
+        Use test management tools for tracking and versioning.
+      </td>
+      <li style="color: #1e90ff; font-weight: bold;">How do you identify what to include in regression?</li>
+      <!-- For "How do you identify what to include in regression?" -->
+      <td>
+        Include all critical functionalities and high-risk areas.<br>
+        Add recently changed or fixed features.<br>
+        Consider frequently used workflows and integration points.<br>
+        Include tests covering past defect patterns.<br>
+        Balance between full and partial regression based on release scope.
+      </td>
+      
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Smoke Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">What is smoke testing and how is it different from sanity?</li>
+      <td>
+        <strong>Smoke Testing:</strong> A quick check to verify basic system stability and build integrity after deployment.<br>
+        <strong>Sanity Testing:</strong> A narrow, deep test of specific functionality after small code changes.<br>
+        <strong>Key Difference:</strong> Smoke = wide shallow check; Sanity = focused deep check.
+      </td>
+
+      <li style="color: #1e90ff; font-weight: bold;">What do you include in a smoke test suite?</li>
+          <td>
+            Core application flows (login, dashboard, navigation).<br>
+            Essential services and API connectivity.<br>
+            Basic UI components loading.<br>
+            No business logic coverage — just health & readiness.<br>
+            Typically 5–15% of overall test coverage.
+          </td>
+
+      <li style="color: #1e90ff; font-weight: bold;">Have you automated smoke tests in CI/CD?</li>
+      <td>
+          Yes, smoke tests are usually the first automated suite triggered post-deployment in CI/CD.<br>
+          Run on every commit or nightly build.<br>
+          Fast execution to provide rapid feedback.<br>
+          Tools: Jenkins, GitHub Actions, GitLab CI with Selenium, Cypress, or REST Assured.<br>
+          Fail-fast approach — stops pipeline if smoke fails.
+        </td>
+
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>API Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">How do you validate API responses and schema?</li>
+        <td>
+          Verify HTTP status codes (e.g. 200, 400, 401).<br>
+          Check response body for expected keys, data types, and values.<br>
+          Validate response schema using JSON Schema validators.<br>
+          Ensure consistency in field naming and data structure.<br>
+          Use assertions to compare actual vs expected response data.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">What tools have you used for API testing?</li>
+        <td>
+          <strong>Postman:</strong> For manual testing and automation using collections.<br>
+          <strong>Swagger / OpenAPI:</strong> For schema validation and documentation.<br>
+          <strong>REST Assured (Java):</strong> For automated backend tests.<br>
+          <strong>Newman:</strong> To run Postman collections in CI.<br>
+          <strong>JMeter:</strong> For performance testing of APIs.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">How do you test API security?</li>
+      <td>
+          Test authentication (OAuth, API keys, tokens).<br>
+          Validate proper role-based access and authorization.<br>
+          Check for sensitive data exposure in headers or responses.<br>
+          Perform negative testing for invalid inputs and injections.<br>
+          Use tools like OWASP ZAP or Postman for security checks.
+        </td>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Beta Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">How do you select users for beta testing?</li>
+          <td>
+          Choose a mix of new and experienced users.<br>
+          Target real users from diverse roles or geographies.<br>
+          Select based on usage history, interest, or application area.<br>
+          Prefer early adopters and loyal customers.<br>
+          Ensure testers represent real-world scenarios.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">What feedback mechanism do you use?</li>
+            <td>
+          Use in-app feedback forms, surveys, and polls.<br>
+          Monitor error logs and usage analytics.<br>
+          Collect feedback via email, forums, or support tickets.<br>
+          Schedule user interviews or feedback calls.<br>
+          Encourage screen recordings or bug reports with screenshots.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">How do you act on beta feedback?</li>
+      <td>
+          Categorize feedback into bugs, improvements, and feature requests.<br>
+          Prioritize critical or frequent issues.<br>
+          Route bugs to development teams and track via issue tracker.<br>
+          Communicate resolutions or updates to beta users.<br>
+          Use feedback to improve UX and finalize release readiness.
+        </td>
+
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Ad-hoc Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">When would you use ad-hoc testing?</li>
+      <td>
+          When there’s limited time for formal test planning.<br>
+          After new builds for quick feedback.<br>
+          To explore untested areas or edge cases.<br>
+          When you suspect defects in specific modules.<br>
+          During early development or post-fix verification.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">What risks come with not having documentation?</li>
+      <td>
+          No traceability or repeatability of test coverage.<br>
+          Harder to reproduce bugs or prove what was tested.<br>
+          Inconsistent testing across team members.<br>
+          Reduced accountability and auditability.<br>
+          Missed knowledge transfer for future testers.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">Can ad-hoc testing replace scripted testing?</li>
+      <td>
+          No — ad-hoc testing complements but doesn't replace scripted testing.<br>
+          Scripted tests ensure coverage, consistency, and repeatability.<br>
+          Ad-hoc is useful for discovery, but lacks structure.<br>
+          Best used alongside formal test plans, not instead of them.<br>
+          Critical systems require traceable, documented tests.
+        </td>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Black Box Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">How do you test without knowing the internal code?</li>
+      <td>
+        Focus on inputs and expected outputs without considering internal logic.<br>
+        Design test cases from requirements, UI, and user flows.<br>
+        Use behavior-based testing to validate system functionality.<br>
+        Validate system as an end user would — no code visibility required.
+      </td>
+      <li style="color: #1e90ff; font-weight: bold;">What are black box test case techniques?</li>
+      <td>
+          <strong>Equivalence Partitioning:</strong> Group inputs that should behave similarly.<br>
+          <strong>Boundary Value Analysis:</strong> Test edges of input ranges.<br>
+          <strong>Decision Table Testing:</strong> Test combinations of inputs/rules.<br>
+          <strong>State Transition:</strong> Validate state changes with inputs.<br>
+          <strong>Error Guessing:</strong> Based on experience and intuition.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">How is black box testing used in UI testing?</li>
+      <td>
+          Validate UI behavior, input validations, and layout without knowing frontend code.<br>
+          Test from the end-user perspective — clicks, form submissions, navigation.<br>
+          Check that UI elements respond correctly to inputs and system events.<br>
+          Focus on usability, accessibility, and functional correctness.<br>
+          Tools: Selenium, Cypress, Playwright.
+        </td>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>White Box Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">What coverage types do you consider (branch, path)?</li>
+      <td>
+          Focus on code coverage metrics like:<br>
+          • <strong>Statement Coverage</strong> – Every line of code is executed.<br>
+          • <strong>Branch Coverage</strong> – Every decision (true/false) is tested.<br>
+          • <strong>Path Coverage</strong> – All unique paths through the code are tested.<br>
+          • <strong>Condition Coverage</strong> – Each boolean sub-expression is tested.<br>
+          Aim for high branch and path coverage in critical modules.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">How do you test internal logic?</li>
+            <td>
+            Write unit tests to target specific functions and logic blocks.<br>
+            Validate input/output combinations, edge cases, and error handling.<br>
+            Use assertions to verify control flow and internal states.<br>
+            Refactor complex logic into testable methods.<br>
+            Use debugging and code instrumentation tools.
+          </td>
+      <li style="color: #1e90ff; font-weight: bold;">Do you write white box tests yourself?</li>
+      <td>
+        Yes, especially for backend modules, utility functions, and service logic.<br>
+        Use unit testing frameworks (e.g., JUnit, pytest, NUnit) to write tests.<br>
+        Maintain test coverage goals across components.<br>
+        Collaborate with developers for deep logic validation when needed.
+      </td>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Exploratory Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">What is the goal of exploratory testing?</li>
+      <td>
+      To simultaneously learn about the application, design tests, and uncover defects.<br>
+      Focuses on finding unexpected issues through hands-on interaction.<br>
+      Encourages tester creativity, intuition, and real-time decision-making.<br>
+      Helps evaluate usability, workflows, and edge cases quickly.
+    </td>
+      <li style="color: #1e90ff; font-weight: bold;">How do you document exploratory test results?</li>
+      <td>
+        Use session notes, mind maps, or exploratory charters.<br>
+        Document what was tested, observations, and any bugs found.<br>
+        Capture screenshots or screen recordings when useful.<br>
+        Tools like TestRail, Xray, or even spreadsheets can help track findings.<br>
+        Keep logs lightweight but clear enough for review or re-testing.
+      </td>
+      <li style="color: #1e90ff; font-weight: bold;">How is it different from ad-hoc testing?</li>
+      <td>
+        <strong>Exploratory Testing</strong> is structured and goal-driven with documentation and analysis.<br>
+        <strong>Ad-hoc Testing</strong> is informal, unstructured, and often undocumented.<br>
+        Exploratory uses defined charters; ad-hoc relies on spontaneous actions.<br>
+        Exploratory focuses on learning and adapting; ad-hoc is more reactive.<br>
+        Both are unscripted but differ in purpose and rigor.
+      </td>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Monkey Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">What tools or scripts have you used for monkey testing?</li>
+      <td>
+          Tools like <strong>MonkeyRunner</strong> (Android), <strong>ADB Monkey</strong>, <strong>Gremlins.js</strong>, and <strong>Chaos Monkey</strong>.<br>
+          Use custom scripts to simulate random inputs and gestures.<br>
+          Browser automation with JavaScript for UI-level chaos testing.<br>
+          Integrate with CI to run randomized stress sessions.<br>
+          Useful in mobile and frontend testing environments.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">What types of bugs are found via monkey testing?</li>
+      <td>
+        Crashes due to unexpected input or events.<br>
+        UI freezes, unresponsive elements, and memory leaks.<br>
+        Navigation issues, random pop-up failures, or hidden defects.<br>
+        Edge-case bugs missed by structured tests.<br>
+        Exception handling gaps and error boundary weaknesses.
+      </td>
+
+      <li style="color: #1e90ff; font-weight: bold;">Do you use it in production or staging?</li>
+            <td>
+        Mostly used in <strong>staging or test environments</strong> to avoid real-user disruption.<br>
+        Never recommended directly in production.<br>
+        Used before release to simulate unpredictable user behavior.<br>
+        Helps validate system resilience and robustness.<br>
+        Run during late-stage QA or pre-UAT phases.
+      </td>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Bug Severity</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">How do you differentiate severity and priority?</li>
+      <td>
+          <strong>Severity:</strong> Impact of a defect on the system’s functionality.<br>
+          <strong>Priority:</strong> How soon a defect should be fixed based on business needs.<br>
+          Severity focuses on technical impact; priority focuses on business urgency.
+        </td>
+
+      <li style="color: #1e90ff; font-weight: bold;">Who assigns severity in your team?</li>
+      <td>
+        Typically, <strong>QA or testers assign severity</strong> based on defect impact.<br>
+        Developers and managers may review or adjust as needed.
+      </td>
+
+      <li style="color: #1e90ff; font-weight: bold;">Can a low-severity bug have high impact?</li>
+      <td>
+        Yes, a <strong>low-severity bug can have high impact</strong> if it affects key users or business operations.<br>
+        For example, cosmetic issues on a homepage might be low severity but high priority.
+      </td>
+
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Compatibility Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">What platforms and devices do you test on?</li>
+      <td>
+          Test on major browsers like Chrome, Firefox, Safari, Edge.<br>
+          Include different versions and devices: desktops, mobiles, tablets.<br>
+          Cover platforms like Windows, macOS, iOS, Android.
+        </td>
+
+      <li style="color: #1e90ff; font-weight: bold;">What tools do you use for cross-browser testing?</li>
+      <td>
+            Tools used: <strong>Selenium WebDriver</strong>, <strong>BrowserStack</strong>, <strong>CrossBrowserTesting</strong>, <strong>LambdaTest</strong>, <strong>Cypress</strong>.
+        </td>
+      <li style="color: #1e90ff; font-weight: bold;">How do you handle OS-specific UI bugs?</li>
+      <td>
+        Report OS-specific UI bugs with screenshots and detailed steps.<br>
+        Prioritize fixes based on affected user base.<br>
+        Use conditional CSS/JS or environment-specific code for workarounds.<br>
+        Retest on target OS after fixes.
+      </td>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Grey Box Testing</h2>
+    <ul>
+      <li style="color: #1e90ff; font-weight: bold;">How does grey box testing differ from white/black box?</li>
+      <td>
+        Combines knowledge of internal code (white box) and external behavior (black box).<br>
+        Tester has partial access to design documents, architecture.<br>
+        Focus on integration points, data flow, and system internals.
+      </td>
+      <li style="color: #1e90ff; font-weight: bold;">How do logs help in grey box testing?</li>
+      <td>
+        Logs help track data flow and errors inside the system.<br>
+        Assist in understanding what happens during test execution.<br>
+        Useful for diagnosing issues not visible externally.
+      </td>
+      <li style="color: #1e90ff; font-weight: bold;">Have you used Postman/dev tools for it?</li>
+      <td>
+        Yes, tools like <strong>Postman</strong> and browser dev tools are used.<br>
+        Postman for API testing with partial backend insight.<br>
+        Dev tools for inspecting network, console logs, and DOM.<br>
+        Helps verify both internal and external system behavior.
+      </td>
+    </ul>
+  </div>
+
+  <div class="card">
+  <h2>Key Testing Concepts for Test Leads & Senior QA Roles</h2>
+  <ul>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Boundary Value Analysis:</strong> Test input limits, e.g., if age field accepts 18-60, test 17, 18, 60, 61 to catch edge errors.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Equivalence Partitioning:</strong> Group inputs like valid ages (18-60) vs invalid (<18 or >60) to minimize test cases but cover scenarios.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Decision Table Testing:</strong> For a loan approval system, create a table mapping income, credit score, and employment status to approval/rejection.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">State Transition Testing:</strong> Test an order process moving from "New" → "Processing" → "Shipped" → "Delivered" states with valid and invalid transitions.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Risk-Based Testing:</strong> Focus testing on payment and login modules first as they impact revenue and security most, rather than less critical features.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Test Planning & Strategy:</strong> Define phases, roles, environments, and scope before testing an e-commerce app rollout to align with stakeholders.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Defect Lifecycle & Management:</strong> Track bugs from “New” to “Assigned” → “In Progress” → “Fixed” → “Verified” → “Closed” to maintain defect status visibility.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Test Metrics & Reporting:</strong> Use metrics like “Test Case Execution Rate” or “Defect Density” to report QA progress to management weekly.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Automation Strategy:</strong> Automate regression tests for login/logout flows and payment gateways to speed up daily builds verification.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Continuous Integration & Delivery (CI/CD):</strong> Integrate automated tests with Jenkins so every code commit triggers builds and tests automatically.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Performance Testing Basics:</strong> Simulate 1000 users concurrently placing orders to check if the system can handle peak loads without crashing.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Security Testing Fundamentals:</strong> Test input fields for SQL injection by entering malicious code like `' OR '1'='1'` to ensure system is safe.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Usability & Accessibility Testing:</strong> Verify that buttons are keyboard-navigable and screen readers correctly read form labels to comply with accessibility standards.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Test Environment Management:</strong> Use a staging environment with the same software versions and data as production to avoid environment-specific bugs.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Stakeholder Communication:</strong> Prepare clear, concise test summary reports for product managers highlighting risks, test coverage, and open issues.
+    </li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>Additional Essential Concepts for Test Leads & QA Professionals</h2>
+  <ul>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Shift-Left Testing:</strong> Involve testing activities earlier in the software development lifecycle (e.g., during requirements and design) to find defects sooner.
+      <br><em>Example:</em> Collaborating with developers and business analysts to create test cases as requirements are written.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Test Data Management:</strong> Creating, maintaining, and protecting realistic test data sets for various testing needs.
+      <br><em>Example:</em> Using anonymized production data for testing user workflows while maintaining data privacy.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Test Case Design Techniques:</strong> Advanced methods like Cause-Effect Graphing, Error Guessing, and Use Case Testing.
+      <br><em>Example:</em> Using Cause-Effect Graphs to map complex input-output relationships for safety-critical systems.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Service Virtualization:</strong> Simulating APIs and backend services that are unavailable or costly to use during testing.
+      <br><em>Example:</em> Virtualizing payment gateway responses to test checkout flows without hitting real services.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Shift-Right Testing:</strong> Testing in production environments such as canary releases and A/B testing to validate real user behavior.
+      <br><em>Example:</em> Deploying a new feature to 10% of users and monitoring feedback before full rollout.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Test Automation Frameworks:</strong> Knowledge of framework types like Data-Driven, Keyword-Driven, and Behavior-Driven Development (BDD).
+      <br><em>Example:</em> Using Cucumber for BDD to enable collaboration between developers, testers, and business stakeholders.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Defect Triage Meetings:</strong> Organizing regular meetings to prioritize and assign defects based on severity, priority, and impact.
+      <br><em>Example:</em> Weekly triage with dev leads, QA, and product managers to align on defect fixes.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Exploratory Testing Charters:</strong> Defining time-boxed test missions with specific goals to guide exploratory testing.
+      <br><em>Example:</em> A charter to explore the "user registration" flow focusing on input validation and error handling.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Release Management & Testing:</strong> Coordinating testing activities around software releases and hotfixes.
+      <br><em>Example:</em> Smoke testing key functionalities immediately after deployment to staging or production.
+    </li>
+    <li>
+      <strong style="color: #1e90ff; font-weight: bold;">Test Documentation Best Practices:</strong> Keeping test artifacts like plans, cases, and reports updated, organized, and accessible.
+      <br><em>Example:</em> Using tools like TestRail or Zephyr for centralized test management.
+    </li>
+  </ul>
+</div>
+
+
+</div>
+</body>
+</html>

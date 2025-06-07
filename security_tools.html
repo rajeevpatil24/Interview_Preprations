@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wiz, Snyk & IaC with Terraform</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      color: #1e90ff;
+    }
+    section {
+      background: white;
+      padding: 1.5rem 2rem;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    pre {
+      background: #272822;
+      color: #f8f8f2;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: monospace;
+    }
+    ul {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wiz, Snyk & Infrastructure as Code (IaC) with Terraform</h1>
+
+  <section id="wiz">
+    <h2>Wiz Security Platform</h2>
+    <p><strong>What is Wiz?</strong></p>
+    <p>Wiz is a cloud security platform that provides comprehensive visibility and risk analysis across cloud environments. It helps organizations detect vulnerabilities, misconfigurations, compliance issues, and runtime threats in cloud workloads.</p>
+
+    <p><strong>How Wiz works internally:</strong></p>
+    <ul>
+      <li><em>Agentless scanning:</em> Wiz connects to cloud providers (AWS, Azure, GCP) via APIs to collect metadata about assets, configurations, and workloads without installing agents on hosts.</li>
+      <li><em>Cloud graph technology:</em> Builds a real-time, interconnected model of your cloud infrastructure, mapping relationships between resources, identities, and network flows.</li>
+      <li><em>Risk prioritization:</em> Uses context-aware algorithms to rank vulnerabilities based on exposure, exploitability, and business impact.</li>
+      <li><em>Continuous monitoring:</em> Automatically rescans environments on configuration or workload changes to detect new risks.</li>
+    </ul>
+
+    <p><strong>Real-world usage:</strong></p>
+    <ul>
+      <li>Security teams get a unified dashboard for all cloud risks.</li>
+      <li>Automated compliance checks for standards like PCI-DSS, HIPAA.</li>
+      <li>DevOps can fix IaC misconfigurations before deployment.</li>
+    </ul>
+    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Agentless Scanning</strong></td>
+      <td>Uses cloud provider APIs (AWS, Azure, GCP) with read-only access to gather metadata about cloud resources (VMs, containers, IAM roles, etc.) without installing agents.</td>
+    </tr>
+    <tr>
+      <td><strong>Cloud Graph</strong></td>
+      <td>Builds a real-time map of cloud assets and their relationships, including network topology, permissions, vulnerabilities, and runtime behavior to prioritize risk accurately.</td>
+    </tr>
+    <tr>
+      <td><strong>Vulnerability and Misconfiguration Detection</strong></td>
+      <td>Scans for known CVEs in OS packages and third-party software, and detects cloud misconfigurations such as overly permissive S3 buckets or open security groups.</td>
+    </tr>
+    <tr>
+      <td><strong>Runtime and Behavior Monitoring</strong></td>
+      <td>Integrates runtime telemetry to detect anomalies, suspicious activities, and zero-day exploits in workloads beyond static scanning.</td>
+    </tr>
+    <tr>
+      <td><strong>Compliance and Governance</strong></td>
+      <td>Includes pre-built compliance policies (PCI-DSS, HIPAA, SOC2) and continuously audits environments to generate audit-ready reports.</td>
+    </tr>
+    <tr>
+      <td><strong>Risk Prioritization & Remediation Guidance</strong></td>
+      <td>Assigns risk scores based on exploitability, exposure, and asset criticality; provides actionable remediation steps like patch instructions or configuration changes.</td>
+    </tr>
+    <tr>
+      <td><strong>Common Commands & Interactions</strong></td>
+      <td>
+        <ul>
+          <li><strong>Web UI:</strong> Dashboards, detailed views, scanning schedules, alert setup.</li>
+          <li><strong>REST API:</strong> Automate data retrieval and integration with CI/CD or SIEM.<br><code>curl -X GET "https://api.wiz.io/v1/vulnerabilities" -H "Authorization: Bearer &lt;API_TOKEN&gt;"</code></li>
+          <li><strong>CLI / API clients:</strong> Use curl/Postman for scripting and automation.</li>
+          <li><strong>Integration:</strong> Connect with Jira, ServiceNow, CI/CD pipelines for alerts and enforcement.</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  </section>
+
+  <section id="snyk">
+    <h2>Snyk - Developer Security Platform</h2>
+    <p><strong>What is Snyk?</strong></p>
+    <p>Snyk is a developer-first security platform focusing on identifying vulnerabilities in code, open-source dependencies, container images, and Infrastructure as Code (IaC) templates.</p>
+
+    <p><strong>How Snyk works internally:</strong></p>
+    <ul>
+      <li><em>Dependency scanning:</em> Integrates with package managers (npm, Maven, PyPI) to scan open-source libraries for known vulnerabilities.</li>
+      <li><em>Code scanning:</em> Static Application Security Testing (SAST) analyzes your source code for security flaws.</li>
+      <li><em>Container scanning:</em> Inspects Docker images for vulnerable layers.</li>
+      <li><em>IaC scanning:</em> Validates Terraform, CloudFormation, Kubernetes YAML for security and compliance issues before deployment.</li>
+      <li><em>CI/CD integration:</em> Snyk can be integrated into build pipelines to prevent vulnerable code from progressing.</li>
+    </ul>
+
+    <p><strong>Real-world usage:</strong></p>
+    <ul>
+      <li>Developers get actionable fix advice and automated pull requests.</li>
+      <li>Security teams track vulnerability trends across projects.</li>
+      <li>Prevent supply chain attacks by scanning dependencies early.</li>
+    </ul>
+    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; text-align: left;">
+  <thead>
+    <tr>
+      <th>Aspect</th>
+      <th>Wiz (Cloud Security Platform)</th>
+      <th>Snyk (Developer Security Tool)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Core Functionality</strong></td>
+      <td>Agentless cloud workload and infrastructure vulnerability scanning with deep cloud context (IAM, networking, runtime).</td>
+      <td>Developer-focused scanning for vulnerabilities in application dependencies, container images, IaC configs, and container runtimes.</td>
+    </tr>
+    <tr>
+      <td><strong>Architecture & Internals</strong></td>
+      <td>
+        <ul>
+          <li>Cloud Graph: Maps assets & relationships across multi-cloud environments.</li>
+          <li>API-based data collection (agentless) for AWS, Azure, GCP metadata.</li>
+          <li>Runtime telemetry to detect live anomalies.</li>
+          <li>Risk scoring with exploitability and asset criticality.</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Integrates into developer workflows (GitHub, GitLab, CLI, IDEs).</li>
+          <li>Static analysis of source code and dependencies for known CVEs.</li>
+          <li>Container image scanning with layered analysis.</li>
+          <li>Infrastructure as Code (IaC) scanning (Terraform, CloudFormation) for misconfigurations.</li>
+          <li>Continuous monitoring and automated fix pull requests.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Scanning Types</strong></td>
+      <td>
+        <ul>
+          <li>Cloud infrastructure vulnerabilities</li>
+          <li>Misconfigurations & compliance violations</li>
+          <li>Runtime threat detection</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Open source dependencies</li>
+          <li>Container images</li>
+          <li>Infrastructure as Code templates</li>
+          <li>Code quality and security issues</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Common Commands / Usage</strong></td>
+      <td>
+        <ul>
+          <li>Web UI dashboards for vulnerability management</li>
+          <li>REST API queries (e.g., curl requests to fetch vulnerability data)</li>
+          <li>Integration with CI/CD pipelines (GitHub Actions, Jenkins)</li>
+          <li>Automation using API tokens for report generation</li>
+        </ul>
+        <pre><code>curl -X GET "https://api.wiz.io/v1/vulnerabilities" -H "Authorization: Bearer &lt;API_TOKEN&gt;"</code></pre>
+      </td>
+      <td>
+        <ul>
+          <li>CLI commands for scanning projects</li>
+          <li>Git integration for automatic pull requests on fixes</li>
+          <li>IDE plugins for live vulnerability feedback</li>
+          <li>API access for automation and custom reports</li>
+        </ul>
+        <pre><code># Scan a project via CLI
+snyk test
+
+# Monitor project and get alerts
+snyk monitor
+
+# Scan container image
+snyk container test myimage:tag</code></pre>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Integration & Automation</strong></td>
+      <td>
+        <ul>
+          <li>SIEM tools (Splunk, QRadar)</li>
+          <li>Ticketing (Jira, ServiceNow)</li>
+          <li>Cloud native tools and dashboards</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>GitHub, GitLab, Bitbucket pipelines</li>
+          <li>CI/CD tools (Jenkins, CircleCI, GitHub Actions)</li>
+          <li>Issue trackers (Jira, GitHub Issues)</li>
+          <li>IDE plugins (VS Code, IntelliJ)</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Use Cases</strong></td>
+      <td>Enterprise cloud security teams monitoring multi-cloud risks, compliance audits, runtime threat detection.</td>
+      <td>Development teams embedding security in DevOps pipelines, continuous dependency scanning, fix automation, container security.</td>
+    </tr>
+  </tbody>
+</table>
+
+  </section>
+
+  <section id="terraform-iac">
+    <h2>Infrastructure as Code (IaC) with Terraform</h2>
+    <p><strong>What is Terraform?</strong></p>
+    <p>Terraform is an open-source IaC tool that lets you define and provision cloud infrastructure through declarative configuration files. It supports multiple providers like AWS, Azure, Google Cloud, Kubernetes, and many others.</p>
+
+    <p><strong>How Terraform works internally:</strong></p>
+    <ul>
+      <li><em>Configuration files:</em> You write infrastructure specs in HashiCorp Configuration Language (HCL), a human-readable syntax.</li>
+      <li><em>Execution plan:</em> Terraform compares the desired state (configuration files) with the current real-world state and generates a plan of actions to achieve the desired state.</li>
+      <li><em>Apply changes:</em> Applies the plan by creating, updating, or deleting resources via provider APIs.</li>
+      <li><em>State management:</em> Maintains a state file that keeps track of managed resources, allowing incremental updates and drift detection.</li>
+    </ul>
+
+    <p><strong>Terraform example snippet (AWS EC2 instance):</strong></p>
+    <pre><code>provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+}</code></pre>
+
+    <p><strong>Why Terraform and IaC matter:</strong></p>
+    <ul>
+      <li>Automates and standardizes infrastructure provisioning.</li>
+      <li>Makes infrastructure reproducible and version-controlled.</li>
+      <li>Supports collaborative workflows in DevOps teams.</li>
+      <li>Enables infrastructure testing and validation (e.g., with Snyk IaC scanning).</li>
+    </ul>
+  </section>
+  <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; text-align: left;">
+  <thead>
+    <tr>
+      <th>Aspect</th>
+      <th>Infrastructure as Code (IaC) with Terraform</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Core Functionality</strong></td>
+      <td>Terraform enables automated provisioning, management, and versioning of infrastructure using declarative configuration files.</td>
+    </tr>
+    <tr>
+      <td><strong>Architecture & Internals</strong></td>
+      <td>
+        <ul>
+          <li>Uses HashiCorp Configuration Language (HCL) for writing config files.</li>
+          <li>Terraform CLI parses configs and builds an execution plan.</li>
+          <li>State file maintains the current infrastructure snapshot.</li>
+          <li>Providers abstract API interactions with cloud platforms (AWS, Azure, GCP, etc.).</li>
+          <li>Supports modules for reusable infrastructure components.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Workflow</strong></td>
+      <td>
+        <ol>
+          <li>Write infrastructure config in `.tf` files.</li>
+          <li>Run `terraform init` to initialize providers and modules.</li>
+          <li>Run `terraform plan` to preview changes.</li>
+          <li>Run `terraform apply` to create/update resources.</li>
+          <li>Use `terraform destroy` to remove resources.</li>
+        </ol>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Common Commands</strong></td>
+      <td>
+        <pre><code>terraform init       # Initialize Terraform configuration
+terraform plan       # Show execution plan
+terraform apply      # Apply changes to infrastructure
+terraform destroy    # Destroy all managed infrastructure
+terraform fmt        # Format config files
+terraform validate   # Validate configuration syntax</code></pre>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>State Management</strong></td>
+      <td>
+        <ul>
+          <li>State file (`terraform.tfstate`) tracks resource metadata.</li>
+          <li>Supports remote state storage for team collaboration (S3, Azure Blob, etc.).</li>
+          <li>State locking prevents concurrent changes.</li>
+          <li>State drift detection to identify out-of-band changes.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Use Cases</strong></td>
+      <td>
+        <ul>
+          <li>Provisioning cloud infrastructure (VMs, networks, databases).</li>
+          <li>Multi-cloud and hybrid cloud orchestration.</li>
+          <li>Managing Kubernetes clusters, DNS, CDN, monitoring resources.</li>
+          <li>Automating environment setups for dev, staging, and production.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Benefits</strong></td>
+      <td>
+        <ul>
+          <li>Version-controlled infrastructure changes.</li>
+          <li>Consistent, repeatable deployments.</li>
+          <li>Improved collaboration with modular code and remote state.</li>
+          <li>Visibility into planned changes before applying.</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Common Integrations</strong></td>
+      <td>
+        <ul>
+          <li>CI/CD pipelines (GitHub Actions, Jenkins, GitLab).</li>
+          <li>Secret management tools (Vault, AWS KMS).</li>
+          <li>Policy enforcement (Sentinel, Open Policy Agent).</li>
+          <li>Cloud platforms and third-party services via providers.</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

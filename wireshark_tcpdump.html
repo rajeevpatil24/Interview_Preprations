@@ -1,0 +1,340 @@
+<div class="card">
+  <h2>Tool Hands-on: Wireshark + TCPDump Basics</h2>
+  <p><strong>Why:</strong> Packet analysis questions are common in QA and troubleshooting scenarios, especially when testing network protocols, performance, or connectivity issues.</p>
+  <p><strong>When:</strong> Ideal for an afternoon lab session – Duration: 1.5 hours</p>
+  <p><strong>How:</strong> Learn to capture network traffic, filter by protocol or port, and inspect common network activities such as TCP handshakes and DNS lookups.</p>
+
+<div class="card">
+  <h2>Tool Hands-on: Wireshark + TCPDump Internals</h2>
+  <p><strong>Why:</strong> Deep packet inspection is crucial for debugging, security analysis, and protocol validation. Tools like Wireshark and TCPDump allow QA and networking teams to trace what’s happening on the wire.</p>
+  <p><strong>When:</strong> Best used during protocol debugging, performance tests, or functional validations that involve network data transfer.</p>
+  <p><strong>How:</strong> These tools capture raw network packets and decode them using protocol dissectors for human-readable inspection.</p>
+
+  <h3>How Wireshark Works (Internals):</h3>
+  <ul>
+    <li><strong>Capture Layer:</strong> Uses libpcap (Linux/macOS) or WinPcap/Npcap (Windows) to hook into the network interface card (NIC) in promiscuous mode.</li>
+    <li><strong>Dissection Engine:</strong> Parses packet data layer by layer (Ethernet, IP, TCP/UDP, DNS, etc.), using protocol decoders.</li>
+    <li><strong>Display Engine:</strong> GUI shows packet list, packet details (tree view), and raw hex bytes.</li>
+    <li><strong>Filtering:</strong> Display filters help you isolate specific traffic (e.g., `http`, `ip.addr == 8.8.8.8`, `tcp.port == 443`).</li>
+  </ul>
+
+  <h3>Packet Structure in Wireshark:</h3>
+  <ul>
+    <li><strong>Frame Header:</strong> Metadata like frame number, capture time, length</li>
+    <li><strong>Ethernet Header:</strong> Source MAC, destination MAC, type (IPv4, ARP, etc.)</li>
+    <li><strong>IP Header:</strong> Source IP, destination IP, protocol (TCP/UDP/ICMP), TTL, checksum</li>
+    <li><strong>TCP/UDP Header:</strong> Source/destination ports, sequence numbers, flags (SYN, ACK, etc.), length</li>
+    <li><strong>Payload:</strong> Application data (DNS query, HTTP request, etc.)</li>
+  </ul>
+
+  <h3>Example Use Cases in Wireshark:</h3>
+  <ul>
+    <li><strong>DNS Lookup:</strong> Filter with `dns`, examine query and response (A, AAAA, MX records)</li>
+    <li><strong>TCP 3-Way Handshake:</strong> Filter with `tcp.flags.syn == 1`, observe SYN → SYN-ACK → ACK sequence</li>
+    <li><strong>UDP Packets:</strong> Analyze streaming or VoIP traffic (no retransmission, unordered)</li>
+    <li><strong>DHCP Discovery:</strong> Filter `bootp`, observe DHCPDISCOVER, DHCPOFFER, DHCPREQUEST, DHCPACK</li>
+    <li><strong>TLS Handshake:</strong> Filter with `ssl` or `tls`, observe certificate exchange and key negotiation</li>
+  </ul>
+
+  <<div class="card">
+  <h2>TCPDump: Internals & Deep Dive</h2>
+
+  <p><strong>What:</strong> TCPDump is a command-line packet analyzer that captures and prints network packets using the <code>libpcap</code> library.</p>
+  <p><strong>Why it matters:</strong> It's lightweight, scriptable, and ideal for automation, headless environments, and root-cause debugging in real time or via captured logs.</p>
+
+  <h3>How TCPDump Works (Internals):</h3>
+  <ul>
+    <li><strong>Packet Capture Engine:</strong> Uses the <code>libpcap</code> API to directly access network interfaces in promiscuous mode (can see all packets, not just those to the host).</li>
+    <li><strong>Packet Filtering:</strong> Uses BPF (Berkeley Packet Filter) syntax to compile high-performance filters into kernel-space to avoid copying unnecessary packets to user space.</li>
+    <li><strong>Capture Loop:</strong> TCPDump reads packets from the NIC, matches them against the filter, and outputs headers or full content to stdout or a `.pcap` file.</li>
+    <li><strong>Modes:</strong> Live capture, verbose decoding (`-v`, `-vvv`), hex and ASCII dump (`-X`), saving to file (`-w`) and reading from file (`-r`).</li>
+  </ul>
+
+  <h3>Packet Structure in TCPDump Output:</h3>
+  <ul>
+    <li><strong>Timestamp:</strong> Capture time of the packet (accurate to microseconds)</li>
+    <li><strong>Source & Destination:</strong> IP addresses and ports</li>
+    <li><strong>Protocol Info:</strong> Flags, sequence numbers, TTL, window size (TCP)</li>
+    <li><strong>Payload:</strong> With <code>-X</code> or <code>-A</code>, shows hex/ASCII dump of data</li>
+  </ul>
+
+  <h3>Common Use Cases:</h3>
+  <ul>
+    <li><strong>Capture all HTTP traffic:</strong><br>
+      <code>tcpdump -i eth0 tcp port 80</code>
+    </li>
+    <li><strong>Capture DNS queries:</strong><br>
+      <code>tcpdump -i eth0 udp port 53</code>
+    </li>
+    <li><strong>Capture all traffic and save to a file:</strong><br>
+      <code>tcpdump -i eth0 -w capture.pcap</code>
+    </li>
+    <li><strong>Read a capture file:</strong><br>
+      <code>tcpdump -r capture.pcap</code>
+    </li>
+    <li><strong>Verbose TCP handshake debugging:</strong><br>
+      <code>tcpdump -i eth0 'tcp[tcpflags] & (tcp-syn|tcp-ack) != 0'</code>
+    </li>
+  </ul>
+
+  <h3>Performance & Low-Level Insights:</h3>
+  <ul>
+    <li><strong>Kernel vs User Space:</strong> BPF filters run in kernel space to reduce overhead.</li>
+    <li><strong>Promiscuous Mode:</strong> Captures all packets, not just those addressed to the host NIC.</li>
+    <li><strong>Snap Length (-s):</strong> Determines how many bytes per packet to capture (default 262144); set to <code>-s 0</code> to capture full packets.</li>
+    <li><strong>Buffer Size:</strong> Use <code>-B</code> to increase capture buffer size and avoid drops.</li>
+    <li><strong>Time Precision:</strong> Use <code>-tttt</code> for full timestamp output.</li>
+  </ul>
+
+  <h3>Advanced Filters (BPF Syntax):</h3>
+  <ul>
+    <li><code>port 443 and host 8.8.8.8</code> – Filter HTTPS to/from Google DNS</li>
+    <li><code>tcp[13] == 2</code> – Capture only TCP SYN packets (start of connection)</li>
+    <li><code>udp[8:4] = 0x12345678</code> – Match specific bytes inside a packet (deep inspection)</li>
+  </ul>
+
+
+  <h3>Pro Tip:</h3>
+  <p>Pair TCPDump with <strong>Wireshark</strong> by capturing data using <code>tcpdump -w</code> and analyzing visually using Wireshark. You can even capture remotely over SSH and analyze locally:</p>
+  <pre><code>ssh user@host "sudo tcpdump -i eth0 -w -" > local_capture.pcap</code></pre>
+</div>
+
+
+  <h3>Common TCPDump Examples:</h3>
+  <pre><code>sudo tcpdump -i eth0 tcp port 80              # Capture HTTP traffic
+      sudo tcpdump -i eth0 udp and port 53          # Capture DNS queries
+      sudo tcpdump -i wlan0 -nn -v port 67 or 68    # Capture DHCP (bootp) traffic
+      sudo tcpdump -i eth0 -X -s 0                  # Show full packet content (including payload)</code></pre>
+
+</div>
+
+
+  <h3>TCPDump Basics:</h3>
+  <ul>
+    <li><code>sudo tcpdump -i eth0</code> – Start packet capture on interface <code>eth0</code></li>
+    <li><code>sudo tcpdump -i eth0 port 80</code> – Filter for HTTP traffic</li>
+    <li><code>sudo tcpdump -nn -v udp port 53</code> – Verbose DNS queries without name resolution</li>
+    <li><code>sudo tcpdump -w output.pcap</code> – Save capture to file for Wireshark</li>
+  </ul>
+
+<div class="card">
+  <h2>Tool Hands-on: Wireshark + TCPDump Internals</h2>
+  <p><strong>Why:</strong> Deep packet inspection is crucial for debugging, security analysis, and protocol validation. Tools like Wireshark and TCPDump allow QA and networking teams to trace what’s happening on the wire.</p>
+  <p><strong>When:</strong> Best used during protocol debugging, performance tests, or functional validations that involve network data transfer.</p>
+  <p><strong>How:</strong> These tools capture raw network packets and decode them using protocol dissectors for human-readable inspection.</p>
+
+  <h3>How Wireshark Works (Internals):</h3>
+  <ul>
+    <li><strong>Capture Layer:</strong> Uses libpcap (Linux/macOS) or WinPcap/Npcap (Windows) to hook into the network interface card (NIC) in promiscuous mode.</li>
+    <li><strong>Dissection Engine:</strong> Parses packet data layer by layer (Ethernet, IP, TCP/UDP, DNS, etc.), using protocol decoders.</li>
+    <li><strong>Display Engine:</strong> GUI shows packet list, packet details (tree view), and raw hex bytes.</li>
+    <li><strong>Filtering:</strong> Display filters help you isolate specific traffic (e.g., `http`, `ip.addr == 8.8.8.8`, `tcp.port == 443`).</li>
+  </ul>
+
+  <h3>Packet Structure in Wireshark:</h3>
+  <ul>
+    <li><strong>Frame Header:</strong> Metadata like frame number, capture time, length</li>
+    <li><strong>Ethernet Header:</strong> Source MAC, destination MAC, type (IPv4, ARP, etc.)</li>
+    <li><strong>IP Header:</strong> Source IP, destination IP, protocol (TCP/UDP/ICMP), TTL, checksum</li>
+    <li><strong>TCP/UDP Header:</strong> Source/destination ports, sequence numbers, flags (SYN, ACK, etc.), length</li>
+    <li><strong>Payload:</strong> Application data (DNS query, HTTP request, etc.)</li>
+  </ul>
+
+  <h3>Example Use Cases in Wireshark:</h3>
+  <ul>
+    <li><strong>DNS Lookup:</strong> Filter with `dns`, examine query and response (A, AAAA, MX records)</li>
+    <li><strong>TCP 3-Way Handshake:</strong> Filter with `tcp.flags.syn == 1`, observe SYN → SYN-ACK → ACK sequence</li>
+    <li><strong>UDP Packets:</strong> Analyze streaming or VoIP traffic (no retransmission, unordered)</li>
+    <li><strong>DHCP Discovery:</strong> Filter `bootp`, observe DHCPDISCOVER, DHCPOFFER, DHCPREQUEST, DHCPACK</li>
+    <li><strong>TLS Handshake:</strong> Filter with `ssl` or `tls`, observe certificate exchange and key negotiation</li>
+  </ul>
+
+  <h3>TCPDump Internals:</h3>
+  <ul>
+    <li>Command-line packet sniffer using `libpcap` to capture raw packets</li>
+    <li>Less readable than Wireshark but very fast, scriptable, and usable in headless environments</li>
+    <li>Supports live filtering by port, IP, protocol, etc.</li>
+    <li>Captures can be saved in `.pcap` files for later analysis in Wireshark</li>
+  </ul>
+
+  <h3>Common TCPDump Examples:</h3>
+  <pre><code>sudo tcpdump -i eth0 tcp port 80              # Capture HTTP traffic
+sudo tcpdump -i eth0 udp and port 53          # Capture DNS queries
+sudo tcpdump -i wlan0 -nn -v port 67 or 68    # Capture DHCP (bootp) traffic
+sudo tcpdump -i eth0 -X -s 0                  # Show full packet content (including payload)</code></pre>
+
+  <h3>Tips for QA and Test Engineers:</h3>
+  <ul>
+    <li>Validate service availability (DNS resolution, successful handshakes)</li>
+    <li>Diagnose network failures or blocked ports</li>
+    <li>Analyze performance by checking latency and retransmissions</li>
+    <li>Use captures for compliance audits or bug triage</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>TCPDump: Internals & Deep Dive</h2>
+
+  <p><strong>What:</strong> TCPDump is a command-line packet analyzer that captures and prints network packets using the <code>libpcap</code> library.</p>
+  <p><strong>Why it matters:</strong> It's lightweight, scriptable, and ideal for automation, headless environments, and root-cause debugging in real time or via captured logs.</p>
+
+  <h3>How TCPDump Works (Internals):</h3>
+  <ul>
+    <li><strong>Packet Capture Engine:</strong> Uses the <code>libpcap</code> API to directly access network interfaces in promiscuous mode (can see all packets, not just those to the host).</li>
+    <li><strong>Packet Filtering:</strong> Uses BPF (Berkeley Packet Filter) syntax to compile high-performance filters into kernel-space to avoid copying unnecessary packets to user space.</li>
+    <li><strong>Capture Loop:</strong> TCPDump reads packets from the NIC, matches them against the filter, and outputs headers or full content to stdout or a `.pcap` file.</li>
+    <li><strong>Modes:</strong> Live capture, verbose decoding (`-v`, `-vvv`), hex and ASCII dump (`-X`), saving to file (`-w`) and reading from file (`-r`).</li>
+  </ul>
+
+  <h3>Packet Structure in TCPDump Output:</h3>
+  <ul>
+    <li><strong>Timestamp:</strong> Capture time of the packet (accurate to microseconds)</li>
+    <li><strong>Source & Destination:</strong> IP addresses and ports</li>
+    <li><strong>Protocol Info:</strong> Flags, sequence numbers, TTL, window size (TCP)</li>
+    <li><strong>Payload:</strong> With <code>-X</code> or <code>-A</code>, shows hex/ASCII dump of data</li>
+  </ul>
+
+  <h3>Common Use Cases:</h3>
+  <ul>
+    <li><strong>Capture all HTTP traffic:</strong><br>
+      <code>tcpdump -i eth0 tcp port 80</code>
+    </li>
+    <li><strong>Capture DNS queries:</strong><br>
+      <code>tcpdump -i eth0 udp port 53</code>
+    </li>
+    <li><strong>Capture all traffic and save to a file:</strong><br>
+      <code>tcpdump -i eth0 -w capture.pcap</code>
+    </li>
+    <li><strong>Read a capture file:</strong><br>
+      <code>tcpdump -r capture.pcap</code>
+    </li>
+    <li><strong>Verbose TCP handshake debugging:</strong><br>
+      <code>tcpdump -i eth0 'tcp[tcpflags] & (tcp-syn|tcp-ack) != 0'</code>
+    </li>
+  </ul>
+
+  <h3>Performance & Low-Level Insights:</h3>
+  <ul>
+    <li><strong>Kernel vs User Space:</strong> BPF filters run in kernel space to reduce overhead.</li>
+    <li><strong>Promiscuous Mode:</strong> Captures all packets, not just those addressed to the host NIC.</li>
+    <li><strong>Snap Length (-s):</strong> Determines how many bytes per packet to capture (default 262144); set to <code>-s 0</code> to capture full packets.</li>
+    <li><strong>Buffer Size:</strong> Use <code>-B</code> to increase capture buffer size and avoid drops.</li>
+    <li><strong>Time Precision:</strong> Use <code>-tttt</code> for full timestamp output.</li>
+  </ul>
+
+  <h3>Advanced Filters (BPF Syntax):</h3>
+  <ul>
+    <li><code>port 443 and host 8.8.8.8</code> – Filter HTTPS to/from Google DNS</li>
+    <li><code>tcp[13] == 2</code> – Capture only TCP SYN packets (start of connection)</li>
+    <li><code>udp[8:4] = 0x12345678</code> – Match specific bytes inside a packet (deep inspection)</li>
+  </ul>
+
+  <h3>QA Relevance:</h3>
+  <ul>
+    <li>Verify TCP handshakes, retransmissions, or dropped packets.</li>
+    <li>Check for DNS resolution delays or failures.</li>
+    <li>Identify slow server responses or connection resets.</li>
+    <li>Capture & replay traffic for regression testing.</li>
+  </ul>
+
+  <h3>Pro Tip:</h3>
+  <p>Pair TCPDump with <strong>Wireshark</strong> by capturing data using <code>tcpdump -w</code> and analyzing visually using Wireshark. You can even capture remotely over SSH and analyze locally:</p>
+  <pre><code>ssh user@host "sudo tcpdump -i eth0 -w -" > local_capture.pcap</code></pre>
+</div>
+
+<div class="card">
+  <h2>Validate Service Availability</h2>
+  <p><strong>What:</strong> Ensures that services are reachable over the network by checking key indicators like DNS resolution, TCP handshakes, and response readiness.</p>
+
+  <p><strong>Why it matters:</strong> Before any functional test, it's critical to confirm that the service endpoint is online and discoverable. Detects outages, misconfigured DNS, or firewall issues early.</p>
+
+  <h3>Checks Performed:</h3>
+  <ul>
+    <li><strong>DNS Resolution:</strong> Verifies if the domain resolves to a valid IP address.</li>
+    <li><strong>TCP Handshake:</strong> Confirms the server is listening and can establish a TCP connection.</li>
+    <li><strong>Port Reachability:</strong> Ensures expected ports (e.g., 443 for HTTPS) are open and responsive.</li>
+  </ul>
+
+  <h3>Commands:</h3>
+  <pre><code># DNS Check
+nslookup example.com
+dig example.com
+
+# TCP Handshake (SYN check)
+telnet example.com 443         # Basic check
+nc -zv example.com 443         # Netcat test (Linux/macOS)
+Test-NetConnection example.com -Port 443  # PowerShell (Windows)
+
+# Ping to verify reachability
+ping example.com</code></pre>
+
+  <h3>Using tcpdump to Verify:</h3>
+  <pre><code># Capture DNS queries
+sudo tcpdump -i eth0 udp port 53
+
+# Capture TCP SYN packets to check handshakes
+sudo tcpdump -i eth0 'tcp[tcpflags] & tcp-syn != 0'</code></pre>
+
+  <p class="why">QA teams can integrate these checks into smoke tests to confirm that services are up before functional testing begins.</p>
+</div>
+<div class="card">
+  <h2>Diagnose Network Failures or Blocked Ports</h2>
+  <p><strong>What:</strong> Identify whether a service is unreachable due to DNS issues, port blocks, routing failures, or firewall rules.</p>
+
+  <p><strong>Why it matters:</strong> QA engineers and network admins need to quickly isolate whether a failure is in the client, network, or server path. Helps avoid false test failures due to infra issues.</p>
+
+  <h3>Common Failure Causes:</h3>
+  <ul>
+    <li>DNS misconfiguration (cannot resolve hostname)</li>
+    <li>Port blocked by local or network firewall</li>
+    <li>Service not running on the destination host</li>
+    <li>Intermediate routing issues (e.g., wrong gateway)</li>
+  </ul>
+
+  <h3>Useful Commands:</h3>
+  <pre><code># Check DNS resolution
+nslookup example.com
+dig example.com
+
+# Test port access
+nc -zv example.com 443             # Netcat port check
+telnet example.com 443             # Basic port test
+Test-NetConnection example.com -Port 443  # Windows PowerShell
+
+# Trace route to debug hop-level failures
+traceroute example.com             # Linux/macOS
+tracert example.com                # Windows
+
+# View firewall rules (Linux)
+sudo iptables -L
+sudo ufw status
+
+# Check for dropped packets or blocked traffic (Linux)
+sudo dmesg | grep 'DROP'</code></pre>
+
+  <h3>Advanced Packet Capture (Wireshark/tcpdump):</h3>
+  <pre><code># Capture packets to/from a host on a port
+sudo tcpdump -i eth0 host example.com and port 443
+
+# Filter failed handshakes or connection resets
+sudo tcpdump -i eth0 'tcp[tcpflags] & (tcp-rst|tcp-syn) != 0'</code></pre>
+
+  <p class="why">These diagnostics help confirm if an issue lies within the network or the application, which is key before escalating to other teams or continuing testing.</p>
+</div>
+
+  <h3>Use Cases:</h3>
+  <ul>
+    <li>Verify if a service is reachable (e.g., DNS server response)</li>
+    <li>Identify dropped or retransmitted packets</li>
+    <li>Confirm correct protocol behavior (e.g., DHCP lease exchange)</li>
+    <li>Troubleshoot slow connections or packet loss</li>
+  </ul>
+
+  <h3>Tips for QA Teams:</h3>
+  <ul>
+    <li>Use Wireshark coloring rules to highlight issues quickly</li>
+    <li>Capture traffic during functional or performance tests</li>
+    <li>Save captures to attach to bug reports</li>
+    <li>Validate packet order and timing</li>
+  </ul>
+</div>

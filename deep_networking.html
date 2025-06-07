@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deep Networking: VPN, BGP, OSPF, SDN</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafc;
+      color: #222;
+      margin: 20px;
+      line-height: 1.6;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    h1 {
+      color: #1e90ff;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    h2 {
+      color: #007acc;
+      border-bottom: 2px solid #007acc;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      vertical-align: top;
+    }
+    th {
+      background-color: #e6f0ff;
+      text-align: left;
+      color: #004080;
+    }
+    p {
+      margin-top: 10px;
+    }
+    .why {
+      font-style: italic;
+      color: #555;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Deep Networking: VPN, BGP, OSPF, SDN</h1>
+
+  <p><strong>Why:</strong> Senior networking roles require in-depth knowledge of core protocols to design, manage, and troubleshoot complex networks.</p>
+  <p><strong>When:</strong> Morning sessions, about 2 hours for study and hands-on demos.</p>
+  <p><strong>How:</strong> Skim RFCs, use network simulators like GNS3, or platforms like FreeCodeCamp to see live protocol demonstrations.</p>
+
+  <h2>Protocol Overview and Differences</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Protocol</th>
+        <th>What It Is</th>
+        <th>Purpose</th>
+        <th>Where Used</th>
+        <th>Real-Time Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>VPN (Virtual Private Network)</strong></td>
+        <td>Secure encrypted tunnel over public networks.</td>
+        <td>Protects data privacy and integrity by encrypting traffic between endpoints.</td>
+        <td>Remote access for employees, site-to-site connectivity across internet.</td>
+        <td>Employees connecting securely to corporate network from home via VPN client.</td>
+      </tr>
+      <tr>
+        <td><strong>BGP (Border Gateway Protocol)</strong></td>
+        <td>Inter-domain routing protocol that manages how packets are routed between large networks (autonomous systems).</td>
+        <td>Ensures efficient and policy-based routing across the global internet.</td>
+        <td>Internet backbone, large ISPs, data centers.</td>
+        <td>Routing between different ISP networks to direct internet traffic.</td>
+      </tr>
+      <tr>
+        <td><strong>OSPF (Open Shortest Path First)</strong></td>
+        <td>Interior Gateway Protocol (IGP) used to dynamically route packets within a single autonomous system.</td>
+        <td>Determines shortest path routing based on link states within an organization’s internal network.</td>
+        <td>Enterprise LANs, data centers, campus networks.</td>
+        <td>Routing within corporate LAN to optimize traffic and redundancy.</td>
+      </tr>
+      <tr>
+        <td><strong>SDN (Software-Defined Networking)</strong></td>
+        <td>Network architecture separating control plane from data plane, allowing programmable network management.</td>
+        <td>Centralizes network intelligence, automates configuration, improves flexibility.</td>
+        <td>Modern data centers, cloud providers, large enterprise networks.</td>
+        <td>Dynamic traffic routing in cloud infrastructure using SDN controllers like OpenDaylight.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>How These Protocols Work and Interact</h2>
+
+  <h3>VPN</h3>
+  <p>VPN establishes an encrypted tunnel using protocols like IPsec or SSL/TLS. It encapsulates and encrypts data packets, allowing secure transmission over untrusted networks such as the internet. Common VPN types include site-to-site VPNs connecting entire offices, and client-to-site VPNs enabling remote workers to access corporate resources.</p>
+
+  <h3>BGP</h3>
+  <p>BGP operates by exchanging routing information between autonomous systems (AS). It uses path vector routing to choose optimal paths based on policies and attributes like AS path, origin, and next-hop. BGP routers establish TCP connections to peers to share routing updates. BGP is crucial for routing between ISPs and large networks, handling network outages and traffic rerouting gracefully.</p>
+
+  <h3>OSPF</h3>
+  <p>OSPF is a link-state routing protocol that builds a topology map of the network. Routers flood link state advertisements (LSAs) to all routers in an area. Using the Dijkstra algorithm, OSPF calculates the shortest path to each destination. It supports fast convergence and hierarchical routing through areas to scale efficiently within large networks.</p>
+
+  <h3>SDN</h3>
+  <p>SDN decouples the control plane (which decides where traffic is sent) from the data plane (which forwards traffic). The network is managed by centralized SDN controllers via programmable APIs. This allows for automated configuration, dynamic load balancing, and rapid deployment of network policies. SDN frameworks include OpenFlow, ONOS, and OpenDaylight.</p>
+
+<h1>Deep Networking: VPN, BGP, OSPF, SDN</h1>
+
+  <p><strong>Why:</strong> Senior networking roles require in-depth knowledge of core protocols to design, manage, and troubleshoot complex networks.</p>
+  <p><strong>When:</strong> Morning sessions, about 2 hours for study and hands-on demos.</p>
+  <p><strong>How:</strong> Skim RFCs, use network simulators like GNS3, or platforms like FreeCodeCamp to see live protocol demonstrations.</p>
+
+  <h2>Protocol Overview and Differences</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Protocol</th>
+        <th>What It Is</th>
+        <th>Purpose</th>
+        <th>Where Used</th>
+        <th>Real-Time Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>VPN (Virtual Private Network)</strong></td>
+        <td>Secure encrypted tunnel over public networks.</td>
+        <td>Protects data privacy and integrity by encrypting traffic between endpoints.</td>
+        <td>Remote access for employees, site-to-site connectivity across internet.</td>
+        <td>Employees connecting securely to corporate network from home via VPN client.</td>
+      </tr>
+      <tr>
+        <td><strong>BGP (Border Gateway Protocol)</strong></td>
+        <td>Inter-domain routing protocol that manages how packets are routed between large networks (autonomous systems).</td>
+        <td>Ensures efficient and policy-based routing across the global internet.</td>
+        <td>Internet backbone, large ISPs, data centers.</td>
+        <td>Routing between different ISP networks to direct internet traffic.</td>
+      </tr>
+      <tr>
+        <td><strong>OSPF (Open Shortest Path First)</strong></td>
+        <td>Interior Gateway Protocol (IGP) used to dynamically route packets within a single autonomous system.</td>
+        <td>Determines shortest path routing based on link states within an organization’s internal network.</td>
+        <td>Enterprise LANs, data centers, campus networks.</td>
+        <td>Routing within corporate LAN to optimize traffic and redundancy.</td>
+      </tr>
+      <tr>
+        <td><strong>SDN (Software-Defined Networking)</strong></td>
+        <td>Network architecture separating control plane from data plane, allowing programmable network management.</td>
+        <td>Centralizes network intelligence, automates configuration, improves flexibility.</td>
+        <td>Modern data centers, cloud providers, large enterprise networks.</td>
+        <td>Dynamic traffic routing in cloud infrastructure using SDN controllers like OpenDaylight.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>How These Protocols Work and Interact</h2>
+
+  <h3>VPN</h3>
+  <p>VPN establishes an encrypted tunnel using protocols like IPsec or SSL/TLS. It encapsulates and encrypts data packets, allowing secure transmission over untrusted networks such as the internet. Common VPN types include site-to-site VPNs connecting entire offices, and client-to-site VPNs enabling remote workers to access corporate resources.</p>
+
+  <div class="interactive-section" id="vpn-section">
+    <h4>Interactive VPN Tunnel Diagram</h4>
+    <svg viewBox="0 0 600 250" aria-label="VPN Tunnel Diagram">
+      <!-- Internet -->
+      <rect x="260" y="100" width="80" height="50" fill="#cce5ff" stroke="#004080" stroke-width="2"/>
+      <text x="300" y="130" font-size="14" fill="#004080" text-anchor="middle">Internet</text>
+
+      <!-- Client -->
+      <rect x="80" y="90" width="100" height="70" fill="#d6f5d6" stroke="#2d862d" stroke-width="2" id="vpn-client"/>
+      <text x="130" y="120" font-size="14" fill="#2d862d" text-anchor="middle">Client</text>
+
+      <!-- VPN Gateway -->
+      <rect x="460" y="90" width="100" height="70" fill="#ffe6cc" stroke="#cc6600" stroke-width="2" id="vpn-gateway"/>
+      <text x="510" y="120" font-size="14" fill="#cc6600" text-anchor="middle">VPN Gateway</text>
+
+      <!-- Arrows -->
+      <line x1="180" y1="125" x2="260" y2="125" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="340" y1="125" x2="460" y2="125" stroke="#000" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#000" />
+        </marker>
+      </defs>
+
+      <!-- Tunnel -->
+      <rect x="250" y="80" width="200" height="90" fill="none" stroke="#007acc" stroke-dasharray="10" stroke-width="3" />
+      <text x="350" y="75" font-size="12" fill="#007acc" text-anchor="middle">Encrypted VPN Tunnel</text>
+    </svg>
+
+    <button onclick="toggleVpnHighlight()">Toggle Encryption Highlight</button>
+  </div>
+
+  <h3>BGP</h3>
+  <p>BGP operates by exchanging routing information between autonomous systems (AS). It uses path vector routing to choose optimal paths based on policies and attributes like AS path, origin, and next-hop. BGP routers establish TCP connections to peers to share routing updates. BGP is crucial for routing between ISPs and large networks, handling network outages and traffic rerouting gracefully.</p>
+
+  <div class="interactive-section" id="bgp-section">
+    <h4>Interactive BGP Peering Diagram</h4>
+    <svg viewBox="0 0 700 250" aria-label="BGP Peering Diagram">
+      <!-- AS 1 -->
+      <rect x="50" y="70" width="130" height="90" fill="#d1e7f7" stroke="#004080" stroke-width="2" />
+      <text x="115" y="105" font-size="14" fill="#004080" text-anchor="middle">AS 1 (ISP A)</text>
+      <circle cx="115" cy="150" r="12" fill="#003366" />
+      <text x="115" y="155" font-size="12" fill="#fff" text-anchor="middle">R1</text>
+
+      <!-- AS 2 -->
+      <rect x="520" y="70" width="130" height="90" fill="#f7d1d1" stroke="#800000" stroke-width="2" />
+      <text x="585" y="105" font-size="14" fill="#800000" text-anchor="middle">AS 2 (ISP B)</text>
+      <circle cx="585" cy="150" r="12" fill="#660000" />
+      <text x="585" y="155" font-size="12" fill="#fff" text-anchor="middle">R2</text>
+
+      <!-- BGP Session Line -->
+      <line x1="127" y1="150" x2="563" y2="150" stroke="#000" stroke-width="3" id="bgp-session" />
+
+      <!-- Arrows for direction -->
+      <polygon points="350,140 360,150 350,160" fill="#000" />
+      <polygon points="350,160 340,150 350,140" fill="#000" />
+    </svg>
+
+    <button onclick="toggleBgpSession()">Toggle BGP Session Status</button>
+  </div>
+
+  <h3>OSPF</h3>
+  <p>OSPF is a link-state routing protocol that builds a topology map of the network. Routers flood link state advertisements (LSAs) to all routers in an area. Using the Dijkstra algorithm, OSPF calculates the shortest path to each destination. It supports fast convergence and hierarchical routing through areas to scale efficiently within large networks.</p>
+
+  <div class="interactive-section" id="ospf-section">
+    <h4>Interactive OSPF Link State Advertisement</h4>
+    <svg viewBox="0 0 600 250" aria-label="OSPF Network Diagram">
+      <!-- Routers -->
+      <circle cx="150" cy="100" r="20" fill="#b3d9ff" stroke="#004080" stroke-width="2" id="ospf-router1" />
+      <text x="150" y="105" font-size="14" fill="#004080" text-anchor="middle">R1</text>
+
+      <circle cx="300" cy="50" r="20" fill="#b3d9ff" stroke="#004080" stroke-width="2" id="ospf-router2" />
+      <text x="300" y="55" font-size="14" fill="#004080" text-anchor="middle">R2</text>
+
+      <circle cx="300" cy="150" r="20" fill="#b3d9ff" stroke="#004080" stroke-width="2" id="ospf-router3" />
+      <text x="300" y="155" font-size="14" fill="#004080" text-anchor="middle">R3</text>
+
+      <circle cx="450" cy="100" r="20" fill="#b3d9ff" stroke="#004080" stroke-width="2" id="ospf-router4" />
+      <text x="450" y="105" font-size="14" fill="#004080" text-anchor="middle">R4</text>
+
+      <!-- Links -->
+      <line x1="170" y1="100" x2="280" y2="60" stroke="#666" stroke-width="3" id="link1" />
+      <line x1="170" y1="100" x2="280" y2="140" stroke="#666" stroke-width="3" id="link2" />
+      <line x1="320" y1="50" x2="430" y2="100" stroke="#666" stroke-width="3" id="link3" />
+      <line x1="320" y1="150" x2="430" y2="100" stroke="#666" stroke-width="3" id="link4" />
+
+      <!-- LSA Packet Highlight -->
+      <rect x="260" y="10" width="100" height="30" fill="#007acc" fill-opacity="0.8" rx="6" ry="6" id="lsa-packet" style="display:none"/>
+      <text x="310" y="30" font-size="14" fill="#fff" text-anchor="middle" id="lsa-text" style="display:none">LSA Packet</text>
+    </svg>
+
+    <button onclick="simulateOspfLsa()">Simulate LSA Flooding</button>
+  </div>
+
+  <h3>SDN</h3>
+  <p>SDN decouples the control plane (which decides where traffic is sent) from the data plane (which forwards traffic). The network is managed by centralized SDN controllers via programmable APIs. This allows for automated configuration, dynamic load balancing, and rapid deployment of network policies. SDN frameworks include OpenFlow, ONOS, and OpenDaylight.</p>
+
+  <div class="interactive-section" id="sdn-section">
+    <h4>Interactive SDN Architecture Diagram</h4>
+    <svg viewBox="0 0 600 300" aria-label="SDN Architecture">
+      <!-- Data Plane Switches -->
+      <rect x="70" y="200" width="80" height="50" fill="#ffecb3" stroke="#b38600" stroke-width="2" />
+      <text x="110" y="230" font-size="14" fill="#b38600" text-anchor="middle">Switch 1</text>
+
+      <rect x="230" y="200" width="80" height="50" fill="#ffecb3" stroke="#b38600" stroke-width="2" />
+      <text x="270" y="230" font-size="14" fill="#b38600" text-anchor="middle">Switch 2</text>
+
+      <rect x="390" y="200" width="80" height="50" fill="#ffecb3" stroke="#b38600" stroke-width="2" />
+      <text x="430" y="230" font-size="14" fill="#b38600" text-anchor="middle">Switch 3</text>
+
+      <!-- Control Plane -->
+      <rect x="230" y="60" width="140" height="80" fill="#cce5ff" stroke="#004080" stroke-width="2" id="sdn-controller"/>
+      <text x="300" y="100" font-size="16" fill="#004080" text-anchor="middle">SDN Controller</text>
+
+      <!-- Connections -->
+      <line x1="270" y1="140" x2="110" y2="200" stroke="#007acc" stroke-width="2" />
+      <line x1="300" y1="140" x2="270" y2="200" stroke="#007acc" stroke-width="2" />
+      <line x1="330" y1="140" x2="430" y2="200" stroke="#007acc" stroke-width="2" />
+
+      <!-- Data Plane -->
+      <text x="300" y="280" font-size="14" fill="#b38600" text-anchor="middle">Data Plane (Switches)</text>
+      <text x="300" y="40" font-size="14" fill="#004080" text-anchor="middle">Control Plane (Controller)</text>
+    </svg>
+
+    <button onclick="highlightSdnFlows()">Show Flow Programming</button>
+  </div>
+
+  <script>
+    // VPN toggle highlight
+    function toggleVpnHighlight() {
+      const client = document.getElementById('vpn-client');
+      const gateway = document.getElementById('vpn-gateway');
+      const tunnel = document.querySelector('rect[stroke-dasharray]');
+
+      client.classList.toggle('highlight');
+      gateway.classList.toggle('highlight');
+      tunnel.classList.toggle('highlight');
+    }
+
+    // BGP toggle session line color
+    function toggleBgpSession() {
+      const session = document.getElementById('bgp-session');
+      if (session.style.stroke === 'green') {
+        session.style.stroke = '#000';
+        session.style.strokeDasharray = '';
+      } else {
+        session.style.stroke = 'green';
+        session.style.strokeDasharray = '5,5';
+      }
+    }
+
+    // OSPF LSA Simulation
+    function simulateOspfLsa() {
+      const lsa = document.getElementById('lsa-packet');
+      const lsaText = document.getElementById('lsa-text');
+      const links = ['link1', 'link2', 'link3', 'link4'].map(id => document.getElementById(id));
+
+      lsa.style.display = 'block';
+      lsaText.style.display = 'block';
+
+      let count = 0;
+
+      function highlightLink() {
+        if (count > 0) links[count - 1].style.stroke = '#666';
+        if (count < links.length) {
+          links[count].style.stroke = '#007acc';
+          links[count].style.strokeWidth = '6';
+          count++;
+          setTimeout(highlightLink, 700);
+        } else {
+          // Reset links after animation
+          setTimeout(() => {
+            links.forEach(link => {
+              link.style.stroke = '#666';
+              link.style.strokeWidth = '3';
+            });
+            lsa.style.display = 'none';
+            lsaText.style.display = 'none';
+          }, 1000);
+        }
+      }
+      highlightLink();
+    }
+
+    // SDN flow highlight
+    function highlightSdnFlows() {
+      const switches = [
+        { id: null, x: 110, y: 200 },
+        { id: null, x: 270, y: 200 },
+        { id: null, x: 430, y: 200 },
+      ];
+
+      const svg = document.querySelector('#sdn-section svg');
+
+      // Create flow arrows
+      if (svg.querySelectorAll('.flow-arrow').length > 0) {
+        // Remove existing flow arrows
+        svg.querySelectorAll('.flow-arrow').forEach(el => el.remove());
+        return;
+      }
+
+      // Draw arrows from controller to switches
+      switches.forEach((sw, i) => {
+        const arrow = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        arrow.setAttribute('x1', 300);
+        arrow.setAttribute('y1', 140);
+        arrow.setAttribute('x2', sw.x);
+        arrow.setAttribute('y2', sw.y);
+        arrow.setAttribute('stroke', '#ff6600');
+        arrow.setAttribute('stroke-width', '4');
+        arrow.setAttribute('class', 'flow-arrow');
+        arrow.setAttribute('marker-end', 'url(#arrow-orange)');
+
+        svg.appendChild(arrow);
+      });
+
+      // Add arrow marker definition for orange arrows
+      if (!svg.querySelector('#arrow-orange')) {
+        const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        defs.innerHTML = `
+          <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,6 L9,3 z" fill="#ff6600" />
+          </marker>
+        `;
+        svg.appendChild(defs);
+      }
+    }
+  </script>
+  <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%; font-family: Arial, sans-serif;">
+  <thead style="background-color:#1e90ff; color:white;">
+    <tr>
+      <th style="width: 20%;">Topic</th>
+      <th style="width: 50%;">Focus Areas</th>
+      <th style="width: 30%;">Examples / Hands-On</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Wireshark / TCPDump</strong><br>Basic to Intermediate</td>
+      <td>
+        <ul>
+          <li>Install Wireshark & tcpdump</li>
+          <li>Capture live traffic</li>
+          <li>Use filters for DNS, HTTP</li>
+          <li>Learn CLI basics of tcpdump</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Capture DNS lookup in Wireshark</li>
+          <li>tcpdump: <code>sudo tcpdump -i eth0 port 53</code></li>
+          <li>Save & analyze capture files (.pcap)</li>
+          <li>Filter HTTP GET requests</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>VPN</strong><br>Conceptual</td>
+      <td>
+        <ul>
+          <li>Understand SSL vs IPSec VPN types</li>
+          <li>How VPNs secure remote and site-to-site access</li>
+          <li>VPN handshake & encryption basics</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Diagram SSL VPN vs IPSec VPN flow</li>
+          <li>Setup simple OpenVPN client (optional)</li>
+          <li>Explain VPN tunnel creation & data encryption</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>BGP / OSPF</strong><br>High-level</td>
+      <td>
+        <ul>
+          <li>BGP as inter-AS routing protocol</li>
+          <li>OSPF as intra-AS routing protocol</li>
+          <li>Key differences: path vector vs link-state</li>
+          <li>Cloud VPC use cases for BGP & OSPF</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Visualize BGP route advertisement</li>
+          <li>Explore OSPF Link State Advertisements</li>
+          <li>GNS3 or cloud sandbox to see routing updates</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>SDN</strong><br>Conceptual + Kubernetes</td>
+      <td>
+        <ul>
+          <li>Understand SDN control & data planes</li>
+          <li>Kubernetes networking basics (Pods, Services)</li>
+          <li>CNI plugins like Calico, Flannel</li>
+          <li>Overlay networks for Pod communication</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Draw SDN architecture</li>
+          <li>Setup a Kubernetes cluster and inspect CNI</li>
+          <li>Test Pod-to-Pod communication</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong>TCP/IP, DNS, HTTP</strong><br>Intermediate</td>
+      <td>
+        <ul>
+          <li>TCP connection lifecycle (3-way handshake)</li>
+          <li>DNS query & response process</li>
+          <li>Common HTTP methods & status codes</li>
+          <li>Troubleshoot DNS failures</li>
+        </ul>
+      </td>
+      <td>
+        <ul>
+          <li>Use Wireshark to see TCP handshake</li>
+          <li>Perform DNS lookups & check failures</li>
+          <li>Capture HTTP GET requests & responses</li>
+          <li>Simulate DNS timeout scenario</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+  <h2>Why Senior Roles Need This Knowledge</h2>
+  <ul>
+    <li><strong>VPN:</strong> Ensuring secure remote access and protecting data integrity.</li>
+    <li><strong>BGP:</strong> Designing scalable, fault-tolerant internet routing architectures.</li>
+    <li><strong>OSPF:</strong> Optimizing internal network traffic with efficient, adaptive routing.</li>
+    <li><strong>SDN:</strong> Enabling agile, programmable networks to support cloud and automation.</li>
+  </ul>
+
+  <h2>Resources for Hands-on Learning</h2>
+  <ul>
+    <li><a href="https://www.gns3.com/" target="_blank" rel="noopener noreferrer">GNS3 Network Simulator</a> – Simulate routers and protocols including BGP, OSPF</li>
+    <li><a href="https://www.freecodecamp.org/news/tag/networking/" target="_blank" rel="noopener noreferrer">FreeCodeCamp Networking Tutorials</a> – Protocol demos and explanations</li>
+    <li><a href="https://tools.ietf.org/" target="_blank" rel="noopener noreferrer">RFC Repository</a> – Official protocol specifications</li>
+  </ul>
+
+</body>
+</html>
